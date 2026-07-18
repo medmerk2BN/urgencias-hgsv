@@ -10,22 +10,33 @@
   "build": {
     "appId": "mx.gob.hgsv.urgencias",
     "productName": "Urgencias HGSV",
-    "directories": { "output": "dist" },
-    "files": ["electron/**/*", "src/**/*"],
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "src/**/*"
+    ],
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "publisherName": "Hospital General Salvatierra"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "installerIcon": "src/assets/logo_hgsv.png"
+      "createStartMenuShortcut": true
     }
   },
   "devDependencies": {
-    "electron": "^31.0.0",
+    "electron": "^31.7.7",
     "electron-builder": "^24.13.3"
   }
 }
