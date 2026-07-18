@@ -287,7 +287,10 @@ function populateCurrentDoc() {
   if (earChk) earChk.checked = !!patient.embarazoAltoRiesgo;
 
   // Nota de Evolución
-  if (currentTab === 'evolucion') renderNotas();
+  if (currentTab === 'evolucion') {
+    renderNotas();
+    requestAnimationFrame(checkNotasOverflow);
+  }
 
   // Lab checklist
   if (currentTab === 'laboratorio') renderLab();
@@ -422,12 +425,14 @@ function renderNotas() {
       const key = this.dataset.notaKey;
       patient.notas[idx][key] = this.value;
       savePatient();
+      requestAnimationFrame(checkNotasOverflow);
     });
     el.addEventListener('input', function() {
       const idx = parseInt(this.dataset.notaIdx);
       const key = this.dataset.notaKey;
       patient.notas[idx][key] = this.value;
       savePatient();
+      requestAnimationFrame(checkNotasOverflow);
     });
   });
 }
@@ -484,6 +489,70 @@ function nuevoPaciente() {
   savePatient();
   buildCapturaForm();
   populateCurrentDoc();
+}
+
+// ---- OVERFLOW INDICATOR ----
+function checkNotasOverflow() {
+  const badge = document.getElementById('notas-overflow-badge');
+  if (!badge) return;
+  if (currentTab !== 'evolucion') { badge.style.display = 'none'; return; }
+  const docPage = document.querySelector('#tab-evolucion .doc-page');
+  if (!docPage) { badge.style.display = 'none'; return; }
+  // Letter page at 96dpi = 1056px; minus 0.5in padding top+bottom (96px) = ~960px content area.
+  // If scrollHeight exceeds that the note will spill onto a second sheet.
+  const overflows = docPage.scrollHeight > 960;
+  badge.style.display = overflows ? 'flex' : 'none';
+}
+
+// ---- PRINT FLOW ----
+function handlePrint() {
+  if (currentTab !== 'evolucion') { window.print(); return; }
+  const docPage = document.querySelector('#tab-evolucion .doc-page');
+  const overflows = docPage && docPage.scrollHeight > 960;
+  if (!overflows) { window.print(); return; }
+  openDuplexModal();
+}
+
+function openDuplexModal() {
+  document.getElementById('duplex-step-0').style.display = 'block';
+  document.getElementById('duplex-step-1').style.display = 'none';
+  document.getElementById('duplex-step-2').style.display = 'none';
+  document.getElementById('duplex-step-3').style.display = 'none';
+  document.getElementById('modal-duplex').style.display = 'flex';
+}
+
+function closeDuplexModal() {
+  document.getElementById('modal-duplex').style.display = 'none';
+}
+
+function printNormal() {
+  closeDuplexModal();
+  window.print();
+}
+
+function duplexStep1() {
+  document.getElementById('duplex-step-0').style.display = 'none';
+  document.getElementById('duplex-step-1').style.display = 'block';
+}
+
+async function printAnverso() {
+  document.getElementById('duplex-step-1').style.display = 'none';
+  if (window.electronAPI) {
+    await window.electronAPI.print({ pageRanges: [{ from: 0, to: 0 }], silent: false });
+  } else {
+    window.print(); // fallback: no Electron context
+  }
+  document.getElementById('duplex-step-2').style.display = 'block';
+}
+
+async function printReverso() {
+  document.getElementById('duplex-step-2').style.display = 'none';
+  if (window.electronAPI) {
+    await window.electronAPI.print({ pageRanges: [{ from: 1, to: 999 }], silent: false });
+  } else {
+    window.print();
+  }
+  document.getElementById('duplex-step-3').style.display = 'block';
 }
 
 // ---- INIT ----
