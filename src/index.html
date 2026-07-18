@@ -60,6 +60,12 @@ a{color:#1b3f8b}
 .doc-outer{display:flex;justify-content:center;padding:0 0 30px}
 .doc-page{background:#fff;box-shadow:0 2px 16px #0002}
 
+/* ---- NOTA EVOLUCIÓN LAYOUT ---- */
+.ev-layout{display:flex;gap:0;border:1px solid #1a2233;margin-top:9px}
+.ev-sidebar{width:160px;flex:none;border-right:1px solid #1a2233}
+.ev-notes-col{flex:1;display:flex;flex-direction:column}
+.ev-print-header{display:none}
+
 /* ---- NOTA EVOLUCION ---- */
 .nota-row{border-bottom:1px solid #c7cedb;padding:10px 12px}
 .nota-row:last-child{border-bottom:none}
@@ -79,10 +85,25 @@ a{color:#1b3f8b}
   body{background:white!important}
   #main-content{padding:0!important}
   .doc-outer{padding:0!important}
-  .doc-page{box-shadow:none!important}
+  .doc-page{box-shadow:none!important;min-height:unset!important}
   .tab-pane{display:none!important}
   .tab-pane.active{display:block!important}
-  @page{size:letter;margin:.45in}
+
+  /* Paginación: secciones y filas no se cortan */
+  .sec{break-inside:avoid;page-break-inside:avoid}
+  .nota-row{break-inside:avoid;page-break-inside:avoid}
+  .lab-grp{break-inside:avoid;page-break-inside:avoid}
+  .frow{break-inside:avoid}
+
+  /* Nota de Evolución en print: sidebar arriba, notas debajo — flujo libre */
+  .ev-layout{display:block!important;border:none!important}
+  .ev-sidebar{width:100%!important;border-right:none!important;border-bottom:1px solid #1a2233;display:flex;flex-wrap:wrap;gap:0 20px;padding-bottom:6px;break-inside:avoid}
+  .ev-sidebar>div{flex:1;min-width:160px}
+  .ev-notes-col{width:100%!important}
+
+  /* Encabezado del paciente repetido en cada página de Nota de Evolución */
+  .ev-print-header{display:block;position:running(pageHeader);font-size:10px;border-bottom:1px solid #1a2233;padding-bottom:4px;margin-bottom:6px}
+  @page{size:letter;margin:.45in;@top-center{content:element(pageHeader)}}
 }
 </style>
 </head>
@@ -130,7 +151,7 @@ a{color:#1b3f8b}
   <!-- ============ HOJA FRONTAL ============ -->
   <div id="tab-frontal" class="tab-pane">
     <div class="doc-outer">
-      <div class="doc-page" style="width:8.5in;min-height:11in;padding:.55in">
+      <div class="doc-page" style="width:8.5in;padding:.55in">
         <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px">
           <div style="flex:1;text-align:center">
             <div style="font-size:11.5px;font-weight:700;color:#1b3f8b">INSTITUTO DE SALUD PUBLICA DEL ESTADO DE GUANAJUATO</div>
@@ -274,8 +295,13 @@ a{color:#1b3f8b}
         <div class="frow"><span class="flabel">Nombre del paciente:</span><input class="uline" style="flex:1" data-combo="nombre apellidoPaterno apellidoMaterno" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly></div>
         <div class="frow"><span class="flabel">Fecha de nacimiento:</span><input class="uline" style="width:110px" data-p="fechaNacimiento" readonly><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> Femenino</label><label class="chk"><input type="checkbox" data-val="Masculino"> Masculino</label><label class="chk"><input type="checkbox" data-val="No binario"> No binario</label></div></div>
 
-        <div style="display:flex;gap:0;border:1px solid #1a2233;margin-top:9px">
-          <div style="width:160px;flex:none;border-right:1px solid #1a2233">
+        <!-- Encabezado repetido en cada página al imprimir -->
+        <div class="ev-print-header">
+          <b>NOTA DE EVOLUCIÓN</b> &nbsp;|&nbsp; Paciente: <span data-p="nombre"></span> <span data-p="apellidoPaterno"></span> <span data-p="apellidoMaterno"></span> &nbsp;|&nbsp; Exp: <span data-p="expediente"></span> &nbsp;|&nbsp; Folio: <span data-p="folio"></span> &nbsp;|&nbsp; Fecha: <span data-p="fechaIngreso"></span>
+        </div>
+
+        <div class="ev-layout">
+          <div class="ev-sidebar">
             <div class="sechd" style="border-bottom:1px solid #1a2233">Signos vitales</div>
             <div style="padding:7px 9px;font-size:10.5px;line-height:1.8">
               Tensión arterial <span data-p="ta"></span> mmHG<br>
@@ -295,7 +321,7 @@ a{color:#1b3f8b}
             </div>
             <div class="sechd" style="border-bottom:1px solid #1a2233">Observaciones</div>
           </div>
-          <div style="flex:1;display:flex;flex-direction:column">
+          <div class="ev-notes-col">
             <div id="notas-container"></div>
             <button id="btn-add-nota" onclick="addNota()">+ Agregar nota</button>
           </div>
