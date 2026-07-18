@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Urgencias HGSV</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef1f6;min-height:100vh}
+input,select,textarea{font-family:inherit}
+a{color:#1b3f8b}
+
+/* ---- APP SHELL ---- */
+#app-header{background:#1b3f8b;color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+#hospital-block{display:flex;align-items:center;gap:10px}
+#hospital-block img{height:52px;width:auto}
+#hospital-block .name{font-size:15px;font-weight:700}
+#hospital-block .sub{font-size:11px;opacity:.75}
+#tab-bar{display:flex;gap:5px;flex-wrap:wrap}
+.tab-btn{border:none;border-radius:7px;padding:7px 10px;font-size:11.5px;font-weight:600;cursor:pointer;background:#ffffff22;color:#fff;transition:background .15s}
+.tab-btn.active{background:#fff;color:#1b3f8b}
+
+#main-content{padding:20px 16px 60px;display:flex;flex-direction:column;align-items:center}
+.tab-pane{display:none;width:100%;max-width:960px}
+.tab-pane.active{display:block}
+
+/* ---- PRINT BUTTON ---- */
+#btn-print{position:sticky;top:70px;z-index:10;float:right;margin-bottom:10px;border:none;background:#1b3f8b;color:#fff;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px #0003}
+
+/* ---- CAPTURA ---- */
+.captura-card{background:#fff;border-radius:12px;padding:24px 28px;box-shadow:0 1px 3px #0002}
+.captura-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px}
+.captura-title{font-size:18px;font-weight:700;color:#1b3f8b}
+#btn-nuevo{border:1px solid #c0392b;background:#fff;color:#c0392b;border-radius:7px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer}
+.captura-hint{font-size:13px;color:#667;margin:0 0 18px}
+.sec-title{font-size:12px;font-weight:700;color:#1b3f8b;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid #1b3f8b22;padding-bottom:5px;margin-bottom:12px}
+.fields-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:0}
+.field-wide{grid-column:1/-1}
+.lbl{display:block;font-size:11px;font-weight:700;color:#1b3f8b;margin-bottom:3px;text-transform:uppercase;letter-spacing:.03em}
+.inp{width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid #c7cedb;border-radius:5px;font-size:13px;color:#1a2233;background:#fff}
+.inp:focus{outline:none;border-color:#1b3f8b}
+.sec-block{margin-bottom:22px}
+
+/* ---- DOCUMENT SHARED ---- */
+.uline{border:none;border-bottom:1px solid #1a2233;background:transparent;font-size:12px;padding:1px 3px;color:#1a2233}
+.uline:focus{outline:none;border-bottom:1.5px solid #1b3f8b}
+.uline[readonly]{cursor:default}
+.flabel{font-weight:700;font-size:11.5px;color:#1a2233;white-space:nowrap}
+.frow{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.chk{display:flex;align-items:center;gap:4px;font-size:11px;white-space:nowrap;cursor:pointer}
+.chk input{width:13px;height:13px;margin:0;accent-color:#1b3f8b;cursor:pointer}
+.sec{border:1.3px solid #1a2233;margin-bottom:7px}
+.sechd{background:#dbe3f0;font-size:10px;font-weight:700;color:#1a2233;padding:3px 8px;letter-spacing:.02em}
+.secbody{padding:8px 10px}
+.clues-row{display:inline-flex;gap:6px;align-items:center;margin-bottom:7px}
+.cluesgrp{display:flex;gap:1px}
+.cluesgrp span{display:inline-flex;align-items:center;justify-content:center;width:14px;height:17px;border:1px solid #1a2233;font-size:10px;font-weight:700}
+
+/* ---- DOC PAGE ---- */
+.doc-outer{display:flex;justify-content:center;padding:0 0 30px}
+.doc-page{background:#fff;box-shadow:0 2px 16px #0002}
+
+/* ---- NOTA EVOLUCION ---- */
+.nota-row{border-bottom:1px solid #c7cedb;padding:10px 12px}
+.nota-row:last-child{border-bottom:none}
+#btn-add-nota{border:1px dashed #1b3f8b66;background:#f4f7fb;color:#1b3f8b;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;margin:10px 12px}
+.btn-rm-nota{border:none;background:none;color:#c33;font-size:11px;cursor:pointer}
+
+/* ---- LAB ---- */
+.lab-cols{columns:3;column-gap:18px;margin-top:10px}
+.lab-grp{break-inside:avoid;margin-bottom:12px}
+.lab-grp-title{font-size:10.5px;font-weight:700;color:#1b3f8b;margin-bottom:4px}
+.lab-item{display:flex;align-items:center;gap:5px;font-size:11px;margin-bottom:2px;cursor:pointer}
+.lab-item input{width:13px;height:13px;margin:0;accent-color:#1b3f8b;cursor:pointer}
+
+/* ---- PRINT ---- */
+@media print{
+  #app-header,#btn-print,#btn-nuevo,#btn-add-nota,.btn-rm-nota{display:none!important}
+  body{background:white!important}
+  #main-content{padding:0!important}
+  .doc-outer{padding:0!important}
+  .doc-page{box-shadow:none!important}
+  .tab-pane{display:none!important}
+  .tab-pane.active{display:block!important}
+  @page{size:letter;margin:.45in}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div id="app-header">
+  <div id="hospital-block">
+    <img src="assets/logo_guanajuato_gob.png" alt="Guanajuato">
+    <div>
+      <div class="name">Hospital General de Salvatierra</div>
+      <div class="sub">Instituto de Salud Pública del Estado de Guanajuato · CLUES GTSSA006495</div>
+    </div>
+  </div>
+  <div id="tab-bar">
+    <button class="tab-btn active" data-tab="captura">Captura</button>
+    <button class="tab-btn" data-tab="frontal">Hoja Frontal</button>
+    <button class="tab-btn" data-tab="diaria">Hoja Diaria Urgencias</button>
+    <button class="tab-btn" data-tab="evolucion">Nota de Evolución</button>
+    <button class="tab-btn" data-tab="consentimiento">Consentimiento</button>
+    <button class="tab-btn" data-tab="hospitalizacion">Hospitalización</button>
+    <button class="tab-btn" data-tab="laboratorio">Laboratorio</button>
+    <button class="tab-btn" data-tab="rayosx">Rayos X</button>
+    <button class="tab-btn" data-tab="violencia">Violencia/Lesión</button>
+    <button class="tab-btn" data-tab="referencia">Referencia</button>
+  </div>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div id="main-content">
+  <button id="btn-print" onclick="window.print()" style="display:none">Imprimir / Guardar PDF</button>
+
+  <!-- ============ CAPTURA ============ -->
+  <div id="tab-captura" class="tab-pane active">
+    <div class="captura-card">
+      <div class="captura-top">
+        <div class="captura-title">Datos del paciente</div>
+        <button id="btn-nuevo" onclick="nuevoPaciente()">Nuevo paciente (limpiar todo)</button>
+      </div>
+      <p class="captura-hint">Captura única — alimenta automáticamente los 9 documentos. Laboratorio, Rayos X y Violencia/Lesión tienen campos adicionales en su propia pestaña.</p>
+      <div id="captura-sections"></div>
+    </div>
+  </div>
+
+  <!-- ============ HOJA FRONTAL ============ -->
+  <div id="tab-frontal" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;min-height:11in;padding:.55in">
+        <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px">
+          <div style="flex:1;text-align:center">
+            <div style="font-size:11.5px;font-weight:700;color:#1b3f8b">INSTITUTO DE SALUD PUBLICA DEL ESTADO DE GUANAJUATO</div>
+            <div style="font-size:19px;font-weight:800;color:#1b3f8b;margin-top:2px">HOSPITAL GENERAL DE SALVATIERRA</div>
+            <div style="font-size:19px;font-weight:800;color:#1a2233;margin-top:6px">HOJA FRONTAL</div>
+          </div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:90px;width:auto;flex:none">
+        </div>
+        <div style="border:2px solid #1a2233;border-radius:14px;padding:18px 22px">
+          <div class="frow"><span class="flabel">NOMBRE:</span><input class="uline" style="flex:1" data-combo="nombre apellidoPaterno apellidoMaterno" readonly><span class="flabel">EDAD:</span><input class="uline" style="width:55px" data-p="edad" readonly><span class="flabel">No. EXP.:</span><input class="uline" style="width:100px" data-p="expediente" readonly></div>
+          <div class="frow"><span class="flabel">NOMBRE SOCIAL:</span><input class="uline" style="flex:1" data-p="nombreSocial" readonly></div>
+          <div class="frow"><span class="flabel">CURP:</span><input class="uline" style="flex:1" data-p="curp" readonly></div>
+          <div class="frow"><span class="flabel">DOMICILIO:</span><input class="uline" style="flex:1" data-p="domicilio" readonly><span class="flabel">FECHA DE NACIMIENTO:</span><input class="uline" style="width:115px" data-p="fechaNacimiento" readonly></div>
+          <div class="frow"><span class="flabel">SERVICIO:</span><input class="uline" style="flex:1" data-p="servicio" readonly></div>
+          <div class="frow"><span class="flabel">DIAGNOSTICO INGRESO:</span><input class="uline" style="flex:1" data-p="diagnosticoIngreso" readonly></div>
+          <div class="frow"><span class="flabel">GRUPO SANGUÍNEO Y RH:</span><input class="uline" style="width:110px" data-p="grupoSanguineo" readonly><span class="flabel">TRANSFUSIONES:</span><input class="uline" style="flex:1" data-p="transfusiones" readonly></div>
+          <div class="frow"><span class="flabel">MÉDICO TRATANTE A SU INGRESO:</span><input class="uline" style="flex:1" data-p="medico" readonly></div>
+          <div class="frow"><span class="flabel">DIAGNÓSTICO EGRESO:</span><input class="uline" style="flex:1" data-p="diagnosticoEgreso" readonly></div>
+          <div class="frow"><span class="flabel">INTERVENCIONES QUIRÚRGICAS:</span><input class="uline" style="flex:1" data-p="intervencionesQuirurgicas" readonly></div>
+          <div class="frow"><span class="flabel">MEDICO TRATANTE A SU EGRESO:</span><input class="uline" style="flex:1" data-p="medicoEgreso" readonly></div>
+          <div class="frow"><span class="flabel">TRATAMIENTOS:</span><input class="uline" style="flex:1" data-p="tratamientos" readonly></div>
+          <div class="frow"><span class="flabel">MÉDICO(S) TRATANTE(S):</span><input class="uline" style="flex:1" data-p="medicosTratantes" readonly></div>
+          <div class="frow"><span class="flabel">SERVICIO(S) QUE SE SOLICITÓ INTER CONSULTAS:</span><input class="uline" style="flex:1" data-p="interconsultas" readonly></div>
+          <div class="frow"><span class="flabel">DÍAS DE ESTANCIA HOSPITALARIA:</span><input class="uline" style="width:70px" data-p="diasEstancia" readonly></div>
+          <div class="frow"><span class="flabel">FECHA DE INGRESO:</span><input class="uline" style="width:130px" data-p="fechaIngreso" readonly><span class="flabel">FECHA DE EGRESO:</span><input class="uline" style="width:130px" data-p="fechaEgreso" readonly></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HOJA DIARIA URGENCIAS ============ -->
+  <div id="tab-diaria" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.45in">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
+          <div style="flex:1;text-align:center">
+            <div style="font-size:15px;font-weight:800;color:#1a2233">HOJA DIARIA DEL SERVICIO DE URGENCIAS</div>
+            <div style="font-size:9.5px;color:#667">SINBA-SEUL-16-P DGIS</div>
+          </div>
+          <div style="text-align:right;font-size:9px;color:#667">FOLIO<br><b style="color:#223;font-size:11px" data-p="folio"></b></div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:54px;width:auto;flex:none">
+        </div>
+        <div class="clues-row">
+          <span class="flabel" style="font-size:10px">CLUES:</span>
+          <div class="cluesgrp"><span>G</span><span>T</span></div>
+          <div class="cluesgrp"><span>S</span><span>S</span><span>A</span></div>
+          <div class="cluesgrp"><span>0</span><span>0</span><span>6</span><span>4</span><span>9</span></div>
+          <div class="cluesgrp"><span>5</span></div>
+        </div>
+
+        <div class="sec"><div class="sechd">PACIENTE</div><div class="secbody">
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-combo="nombre apellidoPaterno apellidoMaterno" readonly></div>
+          <div class="frow"><span class="flabel">CURP:</span><input class="uline" style="width:200px" data-p="curp" readonly><span class="flabel">F. Nacimiento:</span><input class="uline" style="width:100px" data-p="fechaNacimiento" readonly><span class="flabel">Entidad nac.:</span><input class="uline" style="width:110px" data-p="entidadNacimiento" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly></div>
+          <div class="frow"><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> Femenino</label><label class="chk"><input type="checkbox" data-val="Masculino"> Masculino</label><label class="chk"><input type="checkbox" data-val="No binario"> No binario</label></div></div>
+          <div class="frow"><span class="flabel">Afiliación:</span><div class="chk-group" data-field="afiliacion"><label class="chk"><input type="checkbox" data-val="Ninguna"> Ninguna</label><label class="chk"><input type="checkbox" data-val="IMSS"> IMSS</label><label class="chk"><input type="checkbox" data-val="ISSSTE"> ISSSTE</label><label class="chk"><input type="checkbox" data-val="Otra"> Otra</label></div><span class="flabel">Núm.:</span><input class="uline" style="width:110px" data-p="numAfiliacion" readonly></div>
+          <div class="frow"><span class="flabel">Gratuidad:</span><div class="chk-group" data-field="gratuidad"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DOMICILIO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Entidad/país:</span><input class="uline" style="width:100px" data-p="entidadFederativa" readonly><span class="flabel">Municipio:</span><input class="uline" style="width:110px" data-p="municipio" readonly><span class="flabel">Localidad:</span><input class="uline" style="width:100px" data-p="localidad" readonly><span class="flabel">C.P.:</span><input class="uline" style="width:65px" data-p="codigoPostal" readonly></div>
+          <div class="frow"><span class="flabel">Tipo vialidad:</span><input class="uline" style="width:90px" data-p="tipoVialidad" readonly><span class="flabel">Nombre vialidad:</span><input class="uline" style="flex:1" data-p="nombreVialidad" readonly><span class="flabel">Núm. ext.:</span><input class="uline" style="width:60px" data-p="numExt" readonly><span class="flabel">Núm. int.:</span><input class="uline" style="width:60px" data-p="numInt" readonly></div>
+          <div class="frow"><span class="flabel">Tipo asentamiento:</span><input class="uline" style="width:110px" data-p="tipoAsentamiento" readonly><span class="flabel">Nombre asentamiento:</span><input class="uline" style="flex:1" data-p="nombreAsentamiento" readonly><span class="flabel">Teléfono:</span><input class="uline" style="width:110px" data-p="telefono" readonly></div>
+          <div class="frow"><span class="flabel">¿Se considera indígena?</span><div class="chk-group" data-field="seConsideraIndigena"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">¿Se considera afromexicano?</span><div class="chk-group" data-field="seConsideraAfromexicano"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">¿Es migrante retornado?</span><div class="chk-group" data-field="esMigranteRetornado"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">ESTANCIA</div><div class="secbody">
+          <div class="frow"><span class="flabel">Atención prehospitalaria:</span><div class="chk-group" data-field="atencionPrehospitalaria"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">Tiempo de traslado:</span><input class="uline" style="width:80px" data-p="tiempoTraslado" readonly></div>
+          <div class="frow"><span class="flabel">Tipo de urgencia:</span><div class="chk-group" data-field="tipoUrgencia"><label class="chk"><input type="checkbox" data-val="Urgencia calificada"> Urgencia calificada</label><label class="chk"><input type="checkbox" data-val="Urgencia no calificada"> Urgencia no calificada</label></div></div>
+          <div class="frow"><span class="flabel">Motivo de atención:</span><div class="chk-group" data-field="motivoAtencion"><label class="chk"><input type="checkbox" data-val="Accidente, envenenamiento y violencia"> Accidente, envenenamiento y violencia</label><label class="chk"><input type="checkbox" data-val="Médica"> Médica</label><label class="chk"><input type="checkbox" data-val="Ginecoobstétrico"> Ginecoobstétrico</label><label class="chk"><input type="checkbox" data-val="Pediátrico"> Pediátrico</label></div></div>
+          <div class="frow"><span class="flabel">Tipo de cama:</span><div class="chk-group" data-field="tipoCama"><label class="chk"><input type="checkbox" data-val="Cama de observación"> Cama de observación</label><label class="chk"><input type="checkbox" data-val="Cama de choque"> Cama de choque</label><label class="chk"><input type="checkbox" data-val="Sin cama"> Sin cama</label></div></div>
+          <div class="frow"><span class="flabel">Fecha/hora ingreso:</span><input class="uline" style="width:100px" data-p="fechaIngreso" readonly><input class="uline" style="width:70px" data-p="horaIngreso" readonly><span class="flabel">Servicio:</span><input class="uline" style="width:100px" data-p="servicio" readonly><span class="flabel">Cama:</span><input class="uline" style="width:60px" data-p="cama" readonly></div>
+          <div class="frow"><span class="flabel">Traslado transitorio:</span><div class="chk-group" data-field="trasladoTransitorio"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">Unidad:</span><input class="uline" style="width:140px" data-p="unidadTraslado" readonly><span class="flabel">CLUES:</span><input class="uline" style="width:100px" data-p="cluesTraslado" readonly></div>
+          <div class="frow"><span class="flabel">Fecha/hora egreso:</span><input class="uline" style="width:100px" data-p="fechaEgreso" readonly><input class="uline" style="width:70px" data-p="horaEgreso" readonly><span class="flabel">Alta por:</span><div class="chk-group" data-field="altaPor"><label class="chk"><input type="checkbox" data-val="Hospitalización"> Hospitalización</label><label class="chk"><input type="checkbox" data-val="Consulta externa"> Consulta externa</label><label class="chk"><input type="checkbox" data-val="Traslado a otra unidad"> Traslado</label><label class="chk"><input type="checkbox" data-val="Domicilio"> Domicilio</label><label class="chk"><input type="checkbox" data-val="Defunción"> Defunción</label><label class="chk"><input type="checkbox" data-val="Fuga"> Fuga</label><label class="chk"><input type="checkbox" data-val="Voluntad propia"> Voluntad propia</label></div></div>
+          <div class="frow"><span class="flabel">Ministerio Público:</span><div class="chk-group" data-field="ministerioPublico"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">Folio del certificado:</span><input class="uline" style="width:110px" data-p="folioCertificado" readonly></div>
+          <div class="frow"><span class="flabel">Médico responsable:</span><input class="uline" style="flex:1" data-p="medico" readonly></div>
+          <div class="frow"><span class="flabel">Mujer edad fértil:</span><div class="chk-group" data-field="mujerEdadFertil"><label class="chk"><input type="checkbox" data-val="Embarazo"> Embarazo</label><label class="chk"><input type="checkbox" data-val="Puerperio"> Puerperio</label><label class="chk"><input type="checkbox" data-val="No embarazo ni puerperio"> No embarazo ni puerperio</label></div><span class="flabel">Semanas de gestación:</span><input class="uline" style="width:70px" data-p="semanasGestacion" readonly></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">AFECCIONES TRATADAS</div><div class="secbody">
+          <div class="frow"><span class="flabel">Afección principal:</span><input class="uline" style="flex:1" data-p="diagnosticoIngreso" readonly></div>
+          <div class="frow"><span class="flabel">Comorbilidades:</span></div>
+          <div style="font-size:11px;padding-left:10px">
+            1. <input class="uline" style="width:90%" data-p="comorbilidad1" readonly><br>
+            2. <input class="uline" style="width:90%" data-p="comorbilidad2" readonly><br>
+            3. <input class="uline" style="width:90%" data-p="comorbilidad3" readonly><br>
+            4. <input class="uline" style="width:90%" data-p="comorbilidad4" readonly><br>
+            5. <input class="uline" style="width:90%" data-p="comorbilidad5" readonly><br>
+            6. <input class="uline" style="width:90%" data-p="comorbilidad6" readonly>
+          </div>
+          <div class="frow" style="margin-top:5px"><span class="flabel">Causa externa:</span><input class="uline" style="flex:1" data-p="causaExternaAfeccion" readonly></div>
+          <div class="frow"><span class="flabel">Llenado hoja violencia/lesión:</span><div class="chk-group" data-field="llenadoHojaViolencia"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">Folio:</span><input class="uline" style="width:110px" data-p="folioHojaViolencia" readonly></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">INTERCONSULTA</div><div class="secbody" style="font-size:11px">
+          <div class="frow">1. <span class="flabel">Especialidad:</span><input class="uline" style="width:160px" data-p="interconsulta1Especialidad" readonly><span class="flabel">Médico:</span><input class="uline" style="flex:1" data-p="interconsulta1Medico" readonly></div>
+          <div class="frow">2. <span class="flabel">Especialidad:</span><input class="uline" style="width:160px" data-p="interconsulta2Especialidad" readonly><span class="flabel">Médico:</span><input class="uline" style="flex:1" data-p="interconsulta2Medico" readonly></div>
+          <div class="frow">3. <span class="flabel">Especialidad:</span><input class="uline" style="width:160px" data-p="interconsulta3Especialidad" readonly><span class="flabel">Médico:</span><input class="uline" style="flex:1" data-p="interconsulta3Medico" readonly></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">PROCEDIMIENTOS</div><div class="secbody" style="font-size:11px">
+          1. <input class="uline" style="width:90%" data-p="procedimiento1" readonly><br>
+          2. <input class="uline" style="width:90%" data-p="procedimiento2" readonly><br>
+          3. <input class="uline" style="width:90%" data-p="procedimiento3" readonly><br>
+          4. <input class="uline" style="width:90%" data-p="procedimiento4" readonly><br>
+          5. <input class="uline" style="width:90%" data-p="procedimiento5" readonly>
+        </div></div>
+
+        <div class="sec"><div class="sechd">MEDICAMENTOS SUMINISTRADOS</div><div class="secbody" style="font-size:11px">
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:3px 10px">
+            <div style="font-weight:700">Nombre genérico</div><div style="font-weight:700">Presentación</div>
+            <input class="uline" data-p="medicamento1" readonly><input class="uline" data-p="medicamento1Presentacion" readonly>
+            <input class="uline" data-p="medicamento2" readonly><input class="uline" data-p="medicamento2Presentacion" readonly>
+            <input class="uline" data-p="medicamento3" readonly><input class="uline" data-p="medicamento3Presentacion" readonly>
+            <input class="uline" data-p="medicamento4" readonly><input class="uline" data-p="medicamento4Presentacion" readonly>
+            <input class="uline" data-p="medicamento5" readonly><input class="uline" data-p="medicamento5Presentacion" readonly>
+            <input class="uline" data-p="medicamento6" readonly><input class="uline" data-p="medicamento6Presentacion" readonly>
+          </div>
+        </div></div>
+
+        <div class="prof-footer" style="font-size:11px;color:#445;border-top:1px solid #1a2233;padding-top:7px;margin-top:5px">
+          <b>Profesional de la salud responsable:</b> <span data-p="medico"></span> — CURP <span data-p="curpMedico"></span> — Cédula <span data-p="cedulaMedico"></span> — Firma: _______________
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ NOTA DE EVOLUCIÓN ============ -->
+  <div id="tab-evolucion" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.5in">
+        <div style="display:flex;background:#c3d1ea;padding:9px 12px;align-items:center;gap:12px;margin-bottom:2px">
+          <div style="flex:1;font-size:18px;font-weight:800;color:#1a2233;text-align:center">HOSPITAL GENERAL SALVATIERRA</div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:52px;width:auto;flex:none">
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 4px;border-bottom:1px solid #1a2233;margin-bottom:7px">
+          <div style="font-size:14px;font-style:italic;font-weight:800;color:#1a2233;text-decoration:underline">NOTA DE EVOLUCIÓN</div>
+          <div style="font-size:11.5px"><b>Nombre social:</b> <span data-p="nombreSocial"></span></div>
+        </div>
+        <div class="frow"><span class="flabel">Servicio:</span><input class="uline" style="width:150px" data-p="servicio" readonly><span class="flabel">Fecha:</span><input class="uline" style="width:100px" data-p="fechaIngreso" readonly><span class="flabel">Hora:</span><input class="uline" style="width:70px" data-p="horaIngreso" readonly></div>
+        <div class="frow"><span class="flabel">Nombre del paciente:</span><input class="uline" style="flex:1" data-combo="nombre apellidoPaterno apellidoMaterno" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly></div>
+        <div class="frow"><span class="flabel">Fecha de nacimiento:</span><input class="uline" style="width:110px" data-p="fechaNacimiento" readonly><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> Femenino</label><label class="chk"><input type="checkbox" data-val="Masculino"> Masculino</label><label class="chk"><input type="checkbox" data-val="No binario"> No binario</label></div></div>
+
+        <div style="display:flex;gap:0;border:1px solid #1a2233;margin-top:9px">
+          <div style="width:160px;flex:none;border-right:1px solid #1a2233">
+            <div class="sechd" style="border-bottom:1px solid #1a2233">Signos vitales</div>
+            <div style="padding:7px 9px;font-size:10.5px;line-height:1.8">
+              Tensión arterial <span data-p="ta"></span> mmHG<br>
+              Frec. respiratoria <span data-p="fr"></span> /min<br>
+              Frec. cardiaca <span data-p="fc"></span> /min<br>
+              Temperatura <span data-p="temp"></span> °C<br>
+              Oximetría de pulso <span data-p="spo2"></span> %
+            </div>
+            <div class="sechd" style="border-top:1px solid #1a2233;border-bottom:1px solid #1a2233">Pronóstico</div>
+            <div style="height:65px"></div>
+            <div class="sechd" style="border-top:1px solid #1a2233;border-bottom:1px solid #1a2233">Informes</div>
+            <div style="padding:5px 9px;font-size:10.5px;border-bottom:1px solid #1a2233">
+              <b>Familiar</b><br>Nombre: <span data-p="familiar"></span><br><br>Firma
+            </div>
+            <div style="padding:5px 9px;font-size:10.5px;border-bottom:1px solid #1a2233">
+              <b>Paciente</b><br>Nombre: <span data-p="nombre"></span><br><br>Firma
+            </div>
+            <div class="sechd" style="border-bottom:1px solid #1a2233">Observaciones</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column">
+            <div id="notas-container"></div>
+            <button id="btn-add-nota" onclick="addNota()">+ Agregar nota</button>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:10.5px;font-weight:700;border-top:1px solid #1a2233;padding-top:7px;margin-top:7px">
+          Nombre completo, cédula profesional y firma del médico tratante: <span data-p="medico"></span> — <span data-p="cedulaMedico"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CONSENTIMIENTO ============ -->
+  <div id="tab-consentimiento" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.55in">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:5px">
+          <div style="flex:1">
+            <div style="background:#b9c8e6;font-size:17px;font-weight:800;color:#1a2233;text-align:center;padding:5px">HOSPITAL GENERAL SALVATIERRA</div>
+            <div style="font-size:14px;font-weight:800;color:#1a2233;text-decoration:underline;text-align:right;margin-top:3px">CONSENTIMIENTO INFORMADO</div>
+          </div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:64px;width:auto;flex:none">
+        </div>
+        <div style="font-size:11px;margin-bottom:4px">Avenida Bicentenario 801, colonia Ex hacienda de Santo Tomás, Janicho, Salvatierra, Guanajuato.</div>
+        <div style="font-size:11.5px;text-align:right;margin-bottom:13px">Salvatierra, Gto. a <span data-p="fechaIngreso"></span></div>
+
+        <div class="frow"><span class="flabel">Nombre del paciente:</span><input class="uline" style="flex:1" data-combo="nombre apellidoPaterno apellidoMaterno" readonly></div>
+        <div class="frow"><span class="flabel">Fecha de nacimiento:</span><input class="uline" style="width:110px" data-p="fechaNacimiento" readonly><span class="flabel">Edad:</span><input class="uline" style="width:55px" data-p="edad" readonly><span class="flabel">Sexo:</span><input class="uline" style="width:100px" data-p="sexo" readonly></div>
+
+        <div style="font-size:11.5px;margin-bottom:11px">Nombre de la persona representante legal, familiar o allegado designado por el paciente: <b><span data-p="familiar"></span></b>, parentesco: <b><span data-p="relacionResponsable"></span></b></div>
+        <div style="font-size:11.5px;margin-bottom:14px">Otorgo mi autorización, mediante este consentimiento informado al personal médico y paramédico del Hospital General Salvatierra, previa explicación clara del procedimiento, así como los posibles riesgos y complicaciones inherentes al mismo, y los beneficios esperados al realizar dicho procedimiento.</div>
+
+        <div style="font-size:12.5px;font-weight:700;text-align:center;margin-bottom:5px" data-p="procedimientoConsentido"></div>
+        <div style="font-size:11px;margin-bottom:3px">Riesgos y complicaciones que pueden ocurrir durante y después del procedimiento:</div>
+        <div style="font-size:11.5px;border-bottom:1px solid #1a2233;padding-bottom:12px;margin-bottom:12px" data-p="riesgosComplicaciones"></div>
+
+        <div style="font-size:12.5px;font-weight:700;text-align:center;margin-bottom:5px" data-p="diagnostico2"></div>
+        <div style="font-size:11px;margin-bottom:3px">Beneficios esperados como resultado de la realización del procedimiento:</div>
+        <div style="font-size:11.5px;border-bottom:1px solid #1a2233;padding-bottom:12px;margin-bottom:14px" data-p="beneficiosEsperados"></div>
+
+        <div style="font-size:11.5px;margin-bottom:32px">Considerando lo anterior, <u>ACEPTO</u> que se realice el procedimiento, entendiendo y aceptando los riesgos, las complicaciones y los beneficios esperados.</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:20px">
+          <div style="border-top:1px solid #223;padding-top:5px;font-size:11px;text-align:center">Firma del paciente</div>
+          <div style="font-size:11px">Representante legal:<br><b><span data-p="familiar"></span></b><br>Parentesco: <span data-p="relacionResponsable"></span><br>Firma: ________________________</div>
+        </div>
+        <div style="font-size:11px;margin-bottom:18px">Médico<br><br><b><span data-p="medico"></span></b><br>Firma: ________________________</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px">
+          <div style="font-size:11px">Testigos<br>Nombre completo: ________________________<br>Firma: ________________________</div>
+          <div style="font-size:11px">&nbsp;<br>Nombre completo: ________________________<br>Firma: ________________________</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HOSPITALIZACIÓN ============ -->
+  <div id="tab-hospitalizacion" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.4in">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
+          <div style="flex:1;text-align:center">
+            <div style="font-size:15px;font-weight:800;color:#1a2233">HOJA DE HOSPITALIZACIÓN</div>
+            <div style="font-size:9.5px;color:#667">SINBA-SEUL-14-P DGIS</div>
+          </div>
+          <div style="text-align:right;font-size:9px;color:#667">FOLIO<br><b style="color:#223;font-size:11px" data-p="folio"></b></div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:54px;width:auto;flex:none">
+        </div>
+        <div class="clues-row">
+          <span class="flabel" style="font-size:10px">CLUES:</span>
+          <div class="cluesgrp"><span>G</span><span>T</span></div>
+          <div class="cluesgrp"><span>S</span><span>S</span><span>A</span></div>
+          <div class="cluesgrp"><span>0</span><span>0</span><span>6</span><span>4</span><span>9</span></div>
+          <div class="cluesgrp"><span>5</span></div>
+        </div>
+
+        <div class="sec"><div class="sechd">PACIENTE</div><div class="secbody">
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-combo="nombre apellidoPaterno apellidoMaterno" readonly></div>
+          <div class="frow"><span class="flabel">CURP:</span><input class="uline" style="width:185px" data-p="curp" readonly><span class="flabel">F. nacimiento:</span><input class="uline" style="width:100px" data-p="fechaNacimiento" readonly><span class="flabel">Entidad nac.:</span><input class="uline" style="width:110px" data-p="entidadNacimiento" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly></div>
+          <div class="frow"><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> Femenino</label><label class="chk"><input type="checkbox" data-val="Masculino"> Masculino</label><label class="chk"><input type="checkbox" data-val="No binario"> No binario</label></div></div>
+          <div class="frow"><span class="flabel">Afiliación:</span><div class="chk-group" data-field="afiliacion"><label class="chk"><input type="checkbox" data-val="Ninguna"> Ninguna</label><label class="chk"><input type="checkbox" data-val="IMSS"> IMSS</label><label class="chk"><input type="checkbox" data-val="ISSSTE"> ISSSTE</label><label class="chk"><input type="checkbox" data-val="Otra"> Otra</label></div><span class="flabel">Núm.:</span><input class="uline" style="width:110px" data-p="numAfiliacion" readonly></div>
+          <div class="frow"><span class="flabel">Gratuidad:</span><div class="chk-group" data-field="gratuidad"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">¿Se considera indígena?</span><div class="chk-group" data-field="seConsideraIndigena"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">¿Se considera afromexicano?</span><div class="chk-group" data-field="seConsideraAfromexicano"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DOMICILIO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Tipo vialidad:</span><input class="uline" style="width:90px" data-p="tipoVialidad" readonly><span class="flabel">Nombre vialidad:</span><input class="uline" style="flex:1" data-p="nombreVialidad" readonly><span class="flabel">Núm. ext.:</span><input class="uline" style="width:60px" data-p="numExt" readonly><span class="flabel">Núm. int.:</span><input class="uline" style="width:60px" data-p="numInt" readonly></div>
+          <div class="frow"><span class="flabel">Localidad:</span><input class="uline" style="width:100px" data-p="localidad" readonly><span class="flabel">Municipio:</span><input class="uline" style="width:110px" data-p="municipio" readonly><span class="flabel">C.P.:</span><input class="uline" style="width:65px" data-p="codigoPostal" readonly><span class="flabel">Entidad/país:</span><input class="uline" style="width:100px" data-p="entidadFederativa" readonly><span class="flabel">Teléfono:</span><input class="uline" style="width:100px" data-p="telefono" readonly></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">EXPEDIENTE / TIPO DE SERVICIO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Expediente:</span><input class="uline" style="width:110px" data-p="expediente" readonly><span class="flabel">Tipo servicio:</span><div class="chk-group" data-field="hospTipo"><label class="chk"><input type="checkbox" data-val="Hospitalización (normal)"> Hospitalización (normal)</label><label class="chk"><input type="checkbox" data-val="Corta estancia"> Corta estancia</label></div></div>
+          <div class="frow"><span class="flabel">Ingreso:</span><input class="uline" style="width:100px" data-p="fechaIngreso" readonly><input class="uline" style="width:70px" data-p="horaIngreso" readonly><span class="flabel">Egreso:</span><input class="uline" style="width:100px" data-p="fechaEgreso" readonly><input class="uline" style="width:70px" data-p="horaEgreso" readonly></div>
+          <div class="frow"><span class="flabel">Procedencia:</span><div class="chk-group" data-field="procedencia"><label class="chk"><input type="checkbox" data-val="Consulta externa"> Consulta externa</label><label class="chk"><input type="checkbox" data-val="Urgencias"> Urgencias</label><label class="chk"><input type="checkbox" data-val="Referido"> Referido</label><label class="chk"><input type="checkbox" data-val="Cunero patológico"> Cunero patológico</label></div></div>
+          <div class="frow"><span class="flabel">Motivo de egreso:</span><div class="chk-group" data-field="motivoEgreso"><label class="chk"><input type="checkbox" data-val="Curación"> Curación</label><label class="chk"><input type="checkbox" data-val="Mejoría"> Mejoría</label><label class="chk"><input type="checkbox" data-val="Voluntario"> Voluntario</label><label class="chk"><input type="checkbox" data-val="Traslado a otra unidad"> Traslado</label><label class="chk"><input type="checkbox" data-val="Defunción"> Defunción</label><label class="chk"><input type="checkbox" data-val="Fuga"> Fuga</label><label class="chk"><input type="checkbox" data-val="Otro motivo"> Otro motivo</label></div></div>
+          <div class="frow"><span class="flabel">Ministerio Público:</span><div class="chk-group" data-field="ministerioPublico"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">Folio del certificado:</span><input class="uline" style="width:110px" data-p="folioCertificado" readonly></div>
+          <div class="frow"><span class="flabel">Mujer edad fértil:</span><div class="chk-group" data-field="mujerEdadFertil"><label class="chk"><input type="checkbox" data-val="Embarazo"> Embarazo</label><label class="chk"><input type="checkbox" data-val="Puerperio"> Puerperio</label><label class="chk"><input type="checkbox" data-val="No embarazo ni puerperio"> No embarazo ni puerperio</label></div><span class="flabel">Días de estancia:</span><input class="uline" style="width:60px" data-p="diasEstancia" readonly></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">AFECCIONES TRATADAS</div><div class="secbody">
+          <div class="frow"><span class="flabel">Afección principal:</span><input class="uline" style="flex:1" data-p="diagnosticoIngreso" readonly></div>
+          <div class="frow"><span class="flabel">Diagnóstico de egreso:</span><input class="uline" style="flex:1" data-p="diagnosticoEgreso" readonly></div>
+          <div class="frow"><span class="flabel">Comorbilidades:</span></div>
+          <div style="font-size:11px;padding-left:10px">
+            1. <input class="uline" style="width:90%" data-p="comorbilidad1" readonly><br>
+            2. <input class="uline" style="width:90%" data-p="comorbilidad2" readonly><br>
+            3. <input class="uline" style="width:90%" data-p="comorbilidad3" readonly><br>
+            4. <input class="uline" style="width:90%" data-p="comorbilidad4" readonly><br>
+            5. <input class="uline" style="width:90%" data-p="comorbilidad5" readonly><br>
+            6. <input class="uline" style="width:90%" data-p="comorbilidad6" readonly>
+          </div>
+          <div class="frow" style="margin-top:5px"><span class="flabel">Causa externa:</span><input class="uline" style="flex:1" data-p="causaExternaAfeccion" readonly></div>
+          <div class="frow"><span class="flabel">Intervenciones quirúrgicas:</span><input class="uline" style="flex:1" data-p="intervencionesQuirurgicas" readonly></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">PROCEDIMIENTOS DIAGNÓSTICOS, TERAPÉUTICOS Y QUIRÚRGICOS</div><div class="secbody" style="font-size:11px">
+          <div class="frow"><span class="flabel">Infección intrahospitalaria:</span><div class="chk-group" data-field="infeccionIntrahospitalaria"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          1. <input class="uline" style="width:90%" data-p="procedimientoHosp1" readonly><br>
+          2. <input class="uline" style="width:90%" data-p="procedimientoHosp2" readonly><br>
+          3. <input class="uline" style="width:90%" data-p="procedimientoHosp3" readonly><br>
+          4. <input class="uline" style="width:90%" data-p="procedimientoHosp4" readonly><br>
+          5. <input class="uline" style="width:90%" data-p="procedimientoHosp5" readonly>
+          <div class="frow" style="margin-top:5px"><span class="flabel">Tipo de anestesia:</span><div class="chk-group" data-field="tipoAnestesia"><label class="chk"><input type="checkbox" data-val="General"> General</label><label class="chk"><input type="checkbox" data-val="Regional"> Regional</label><label class="chk"><input type="checkbox" data-val="Sedación"> Sedación</label><label class="chk"><input type="checkbox" data-val="Local"> Local</label><label class="chk"><input type="checkbox" data-val="Combinado"> Combinado</label><label class="chk"><input type="checkbox" data-val="No usó"> No usó</label></div></div>
+          <div class="frow"><span class="flabel">Violencia y/o lesión:</span><div class="chk-group" data-field="violenciaYLesionHosp"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">Folio de la hoja de lesiones:</span><input class="uline" style="width:110px" data-p="folioLesionesHosp" readonly></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">ATENCIÓN OBSTÉTRICA</div><div class="secbody" style="font-size:11px">
+          <div class="frow"><span class="flabel">Aplica:</span><div class="chk-group" data-field="atencionObstetricaAplica"><label class="chk"><input type="checkbox" data-val="No aplica"> No aplica</label><label class="chk"><input type="checkbox" data-val="Aplica"> Aplica</label></div></div>
+          <div class="frow"><span class="flabel">Historia ginecobstétrica:</span><input class="uline" style="flex:1" data-p="historiaGinecobstetrica" readonly></div>
+          <div class="frow"><span class="flabel">Planificación familiar:</span><input class="uline" style="flex:1" data-p="planificacionFamiliar" readonly></div>
+        </div></div>
+
+        <div style="font-size:11px;color:#445;border-top:1px solid #1a2233;padding-top:7px;margin-top:5px">
+          <b>Profesional de la salud responsable:</b> <span data-p="medico"></span> — CURP <span data-p="curpMedico"></span> — Cédula <span data-p="cedulaMedico"></span> — Firma: _______________
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ LABORATORIO ============ -->
+  <div id="tab-laboratorio" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.5in">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px">
+          <div style="flex:1;background:#b9c8e6;padding:7px 10px;text-align:center;font-size:17px;font-weight:800;color:#1a2233">HOSPITAL GENERAL SALVATIERRA</div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:68px;width:auto;flex:none">
+        </div>
+        <div style="text-align:center;font-size:14px;font-weight:800;color:#1a2233;text-decoration:underline;margin-bottom:9px">SOLICITUD DE LABORATORIO</div>
+
+        <div class="frow"><span class="flabel">Fecha:</span><input class="uline" style="width:100px" data-p="fechaIngreso" readonly><span class="flabel">Hora:</span><input class="uline" style="width:70px" data-p="horaIngreso" readonly></div>
+        <div class="frow"><span class="flabel">Servicio:</span><input class="uline" style="width:130px" data-p="servicio" readonly><span class="flabel">Cama:</span><input class="uline" style="width:60px" data-p="cama" readonly>
+          <div class="chk-group" data-field="hospOConsulta"><label class="chk"><input type="checkbox" data-val="Hospitalización"> Hospitalización</label><label class="chk"><input type="checkbox" data-val="Consulta externa"> Consulta externa</label></div>
+          <span class="flabel">Prioridad:</span>
+          <div class="chk-group" data-field="prioridadEstudio"><label class="chk"><input type="checkbox" data-val="Urgente"> Urgente</label><label class="chk"><input type="checkbox" data-val="Prioritario"> Prioritario</label><label class="chk"><input type="checkbox" data-val="Ordinario"> Ordinario</label></div>
+        </div>
+        <div class="frow"><span class="flabel">Nombre del paciente:</span><input class="uline" style="flex:1" data-combo="nombre apellidoPaterno apellidoMaterno" readonly><span class="flabel">CURP:</span><input class="uline" style="width:155px" data-p="curp" readonly></div>
+        <div class="frow"><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> Femenino</label><label class="chk"><input type="checkbox" data-val="Masculino"> Masculino</label><label class="chk"><input type="checkbox" data-val="No binario"> No binario</label></div><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly><span class="flabel">Derechohabiencia:</span><div class="chk-group" data-field="afiliacion"><label class="chk"><input type="checkbox" data-val="Ninguna"> Ninguna</label><label class="chk"><input type="checkbox" data-val="IMSS"> IMSS</label><label class="chk"><input type="checkbox" data-val="ISSSTE"> ISSSTE</label><label class="chk"><input type="checkbox" data-val="Otra"> Otra</label></div></div>
+        <div class="frow"><span class="flabel">Diagnóstico:</span><input class="uline" style="flex:1" data-p="diagnosticoIngreso" readonly></div>
+
+        <div class="lab-cols" id="lab-checklist"></div>
+
+        <div style="font-size:11px;color:#445;margin-top:9px;border-top:1px solid #1a2233;padding-top:9px">
+          Nombre completo, cédula y firma del médico solicitante: <span data-p="medico"></span> — <span data-p="cedulaMedico"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RAYOS X ============ -->
+  <div id="tab-rayosx" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.5in">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px">
+          <div style="flex:1;background:#b9c8e6;padding:7px 10px;text-align:center;font-size:17px;font-weight:800;color:#1a2233">HOSPITAL GENERAL SALVATIERRA</div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:68px;width:auto;flex:none">
+        </div>
+        <div style="text-align:center;font-size:14px;font-weight:800;color:#1a2233;text-decoration:underline;margin-bottom:9px">SOLICITUD DE RAYOS X E IMAGENOLOGÍA</div>
+
+        <div class="frow"><span class="flabel">Fecha:</span><input class="uline" style="width:100px" data-p="fechaIngreso" readonly><span class="flabel">Hora:</span><input class="uline" style="width:70px" data-p="horaIngreso" readonly><span class="flabel">Portátil:</span><div class="chk-group" data-field="xray.portatil"><label class="chk"><input type="checkbox" data-val="No"> No</label><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label></div></div>
+        <div class="frow"><span class="flabel">Servicio:</span><input class="uline" style="width:130px" data-p="servicio" readonly><span class="flabel">Cama:</span><input class="uline" style="width:60px" data-p="cama" readonly>
+          <div class="chk-group" data-field="hospOConsulta"><label class="chk"><input type="checkbox" data-val="Hospitalización"> Hospitalización</label><label class="chk"><input type="checkbox" data-val="Consulta externa"> Consulta externa</label></div>
+          <span class="flabel">Prioridad:</span>
+          <div class="chk-group" data-field="prioridadEstudio"><label class="chk"><input type="checkbox" data-val="Urgente"> Urgente</label><label class="chk"><input type="checkbox" data-val="Prioritario"> Prioritario</label><label class="chk"><input type="checkbox" data-val="Ordinario"> Ordinario</label></div>
+        </div>
+        <div class="frow"><span class="flabel">Nombre del paciente:</span><input class="uline" style="flex:1" data-combo="nombre apellidoPaterno apellidoMaterno" readonly><span class="flabel">CURP:</span><input class="uline" style="width:155px" data-p="curp" readonly></div>
+        <div class="frow"><span class="flabel">Género:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> Femenino</label><label class="chk"><input type="checkbox" data-val="Masculino"> Masculino</label><label class="chk"><input type="checkbox" data-val="No binario"> No binario</label></div><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly><span class="flabel">Derechohabiencia:</span><div class="chk-group" data-field="afiliacion"><label class="chk"><input type="checkbox" data-val="Ninguna"> Ninguna</label><label class="chk"><input type="checkbox" data-val="IMSS"> IMSS</label><label class="chk"><input type="checkbox" data-val="ISSSTE"> ISSSTE</label><label class="chk"><input type="checkbox" data-val="Otra"> Otra</label></div></div>
+        <div class="frow"><span class="flabel">Diagnóstico:</span><input class="uline" style="flex:1" data-p="diagnosticoIngreso" readonly></div>
+
+        <div class="sec" style="margin-top:5px"><div class="sechd">ESTUDIO SOLICITADO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Rayos X:</span><input class="uline" style="flex:1" data-rw="xray.rayosX"></div>
+          <div class="frow"><span class="flabel">Ultrasonido:</span><input class="uline" style="flex:1" data-rw="xray.ultrasonido"></div>
+          <div class="frow"><span class="flabel">Mastografía:</span><input class="uline" style="flex:1" data-rw="xray.mastografia"></div>
+          <div class="frow"><span class="flabel">Otros estudios:</span><input class="uline" style="flex:1" data-rw="xray.otros"><div class="chk-group" data-field="xray.otrosModalidad"><label class="chk"><input type="checkbox" data-val="Simple"> Simple</label><label class="chk"><input type="checkbox" data-val="Contrastada"> Contrastada</label></div></div>
+          <div class="frow"><span class="flabel">Tomografía:</span><input class="uline" style="flex:1" data-rw="xray.tomografia"><div class="chk-group" data-field="xray.tomografiaModalidad"><label class="chk"><input type="checkbox" data-val="Simple"> Simple</label><label class="chk"><input type="checkbox" data-val="Contrastada"> Contrastada</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">PARA ESTUDIOS CONTRASTADOS</div><div class="secbody">
+          <div class="frow"><span class="flabel">Alergias:</span><input class="uline" style="flex:1" data-p="alergias" readonly><span class="flabel">Urea:</span><input class="uline" style="width:70px" data-rw="xray.urea"><span class="flabel">Creatinina:</span><input class="uline" style="width:70px" data-rw="xray.creatinina"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">JUSTIFICACIÓN DE ESTUDIO PORTÁTIL</div><div class="secbody">
+          <textarea class="inp" rows="2" style="resize:vertical" data-rw="xray.justificacion"></textarea>
+        </div></div>
+
+        <div style="font-size:11px;color:#445;border-top:1px solid #1a2233;padding-top:9px">
+          Nombre, firma y cédula profesional del médico solicitante: <span data-p="medico"></span> — <span data-p="cedulaMedico"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ VIOLENCIA / LESIÓN ============ -->
+  <div id="tab-violencia" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.4in">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
+          <div style="flex:1;text-align:center">
+            <div style="font-size:13.5px;font-weight:800;color:#1a2233">HOJA DE REGISTRO DE ATENCIÓN POR VIOLENCIA Y/O LESIÓN</div>
+            <div style="font-size:9.5px;color:#667">SINBA SEUL-17-P DGIS</div>
+          </div>
+          <div style="text-align:right;font-size:9px;color:#667">FOLIO<br><b style="color:#223;font-size:11px" data-p="folio"></b></div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:54px;width:auto;flex:none">
+        </div>
+        <div class="clues-row">
+          <span class="flabel" style="font-size:10px">CLUES:</span>
+          <div class="cluesgrp"><span>G</span><span>T</span></div>
+          <div class="cluesgrp"><span>S</span><span>S</span><span>A</span></div>
+          <div class="cluesgrp"><span>0</span><span>0</span><span>6</span><span>4</span><span>9</span></div>
+          <div class="cluesgrp"><span>5</span></div>
+        </div>
+
+        <div class="sec"><div class="sechd">PACIENTE AFECTADO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-combo="nombre apellidoPaterno apellidoMaterno" readonly><span class="flabel">CURP:</span><input class="uline" style="width:155px" data-p="curp" readonly></div>
+          <div class="frow"><span class="flabel">F. nacimiento:</span><input class="uline" style="width:100px" data-p="fechaNacimiento" readonly><span class="flabel">Entidad de nacimiento:</span><input class="uline" style="width:130px" data-p="entidadNacimiento" readonly></div>
+          <div class="frow"><span class="flabel">Escolaridad:</span><div class="chk-group" data-field="violencia.escolaridad"><label class="chk"><input type="checkbox" data-val="Ninguna"> Ninguna</label><label class="chk"><input type="checkbox" data-val="Primaria"> Primaria</label><label class="chk"><input type="checkbox" data-val="Secundaria"> Secundaria</label><label class="chk"><input type="checkbox" data-val="Bachillerato o preparatoria"> Bachillerato</label><label class="chk"><input type="checkbox" data-val="Profesional"> Profesional</label><label class="chk"><input type="checkbox" data-val="Posgrado"> Posgrado</label></div><span class="flabel">¿Sabe leer y escribir?</span><div class="chk-group" data-field="violencia.sabeLeer"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> Femenino</label><label class="chk"><input type="checkbox" data-val="Masculino"> Masculino</label><label class="chk"><input type="checkbox" data-val="No binario"> No binario</label></div></div>
+          <div class="frow"><span class="flabel">Afiliación:</span><div class="chk-group" data-field="afiliacion"><label class="chk"><input type="checkbox" data-val="Ninguna"> Ninguna</label><label class="chk"><input type="checkbox" data-val="IMSS"> IMSS</label><label class="chk"><input type="checkbox" data-val="ISSSTE"> ISSSTE</label><label class="chk"><input type="checkbox" data-val="Otra"> Otra</label></div><span class="flabel">Núm.:</span><input class="uline" style="width:100px" data-p="numAfiliacion" readonly><span class="flabel">Gratuidad:</span><div class="chk-group" data-field="gratuidad"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">¿Se considera indígena?</span><div class="chk-group" data-field="seConsideraIndigena"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">¿Habla lengua indígena?</span><div class="chk-group" data-field="violencia.habaLenguaIndigena"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">¿Se considera afromexicano?</span><div class="chk-group" data-field="seConsideraAfromexicano"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">Mujer en edad fértil:</span><div class="chk-group" data-field="mujerEdadFertil"><label class="chk"><input type="checkbox" data-val="Embarazo"> Embarazo</label><label class="chk"><input type="checkbox" data-val="Puerperio"> Puerperio</label><label class="chk"><input type="checkbox" data-val="No embarazo ni puerperio"> No embarazo ni puerperio</label></div><span class="flabel">Dificultad (discapacidad):</span><div class="chk-group" data-field="violencia.dificultadDiscapacidad"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">REFERIDO(A) POR</div><div class="secbody">
+          <div class="frow" style="align-items:flex-start"><div class="chk-group" data-field="violencia.referidoPor"><label class="chk"><input type="checkbox" data-val="Unidad médica"> Unidad médica</label><label class="chk"><input type="checkbox" data-val="Secretaría de Educación Pública"> SEP</label><label class="chk"><input type="checkbox" data-val="Desarrollo Social"> Desarrollo Social</label><label class="chk"><input type="checkbox" data-val="DIF"> DIF</label><label class="chk"><input type="checkbox" data-val="Otras instituciones gubernamentales"> Otras inst. gubernamentales</label><label class="chk"><input type="checkbox" data-val="Instituciones No gubernamentales"> Inst. No gubernamentales</label><label class="chk"><input type="checkbox" data-val="Procuración de Justicia"> Procuración de Justicia</label><label class="chk"><input type="checkbox" data-val="Sin referencia (iniciativa propia)"> Sin referencia</label></div></div>
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-rw="violencia.nombreReferido"><span class="flabel">CLUES:</span><input class="uline" style="width:120px" data-rw="violencia.cluesReferido"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">EVENTO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Fecha:</span><input class="uline" style="width:100px" data-rw="violencia.fecha"><span class="flabel">Hora:</span><input class="uline" style="width:70px" data-rw="violencia.hora"><span class="flabel">¿Fue día festivo?</span><div class="chk-group" data-field="violencia.fueDiaFestivo"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">Sitio de ocurrencia:</span><div class="chk-group" data-field="violencia.sitio"><label class="chk"><input type="checkbox" data-val="Vivienda"> Vivienda</label><label class="chk"><input type="checkbox" data-val="Institución residencial"> Institución residencial</label><label class="chk"><input type="checkbox" data-val="Escuela"> Escuela</label><label class="chk"><input type="checkbox" data-val="Vía pública (peatón)"> Vía pública</label><label class="chk"><input type="checkbox" data-val="Comercio y áreas de servicio"> Comercio</label><label class="chk"><input type="checkbox" data-val="Trabajo"> Trabajo</label><label class="chk"><input type="checkbox" data-val="Vehículo automotor privado"> Vehículo automotor</label><label class="chk"><input type="checkbox" data-val="Otro lugar"> Otro</label></div></div>
+          <div class="frow"><span class="flabel">Municipio:</span><input class="uline" style="width:120px" data-rw="violencia.municipioOcurrencia"><span class="flabel">Localidad:</span><input class="uline" style="width:110px" data-rw="violencia.localidadOcurrencia"><span class="flabel">C.P.:</span><input class="uline" style="width:65px" data-rw="violencia.cpOcurrencia"></div>
+          <div class="frow"><span class="flabel">Intencionalidad:</span><div class="chk-group" data-field="violencia.intencionalidad"><label class="chk"><input type="checkbox" data-val="Accidental"> Accidental</label><label class="chk"><input type="checkbox" data-val="Violencia familiar"> Violencia familiar</label><label class="chk"><input type="checkbox" data-val="Violencia no familiar"> Violencia no familiar</label><label class="chk"><input type="checkbox" data-val="Autoinfligido"> Autoinfligido</label><label class="chk"><input type="checkbox" data-val="Trata de personas"> Trata de personas</label></div></div>
+          <div class="frow"><span class="flabel">Agente de la lesión:</span><div class="chk-group" data-field="violencia.agente"><label class="chk"><input type="checkbox" data-val="Caída"> Caída</label><label class="chk"><input type="checkbox" data-val="Objeto contundente"> Obj. contundente</label><label class="chk"><input type="checkbox" data-val="Objeto punzocortante"> Obj. punzocortante</label><label class="chk"><input type="checkbox" data-val="Proyectil arma de fuego"> Proyectil arma fuego</label><label class="chk"><input type="checkbox" data-val="Intoxicación por drogas o medicamentos"> Intoxicación</label><label class="chk"><input type="checkbox" data-val="Fuego, flama, sustancia caliente/vapor"> Fuego/quemadura</label><label class="chk"><input type="checkbox" data-val="Piquete/mordedura de animal"> Mordedura animal</label><label class="chk"><input type="checkbox" data-val="Otro"> Otro</label></div></div>
+          <div class="frow"><span class="flabel">¿Atención prehospitalaria?</span><div class="chk-group" data-field="atencionPrehospitalaria"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">Tiempo traslado:</span><input class="uline" style="width:80px" data-p="tiempoTraslado" readonly></div>
+          <div class="frow"><span class="flabel">Paciente bajo efectos de:</span><div class="chk-group" data-field="violencia.bajoEfectosPaciente"><label class="chk"><input type="checkbox" data-val="Alcohol"> Alcohol</label><label class="chk"><input type="checkbox" data-val="Droga por indicación médica"> Droga médica</label><label class="chk"><input type="checkbox" data-val="Drogas ilegales"> Drogas ilegales</label><label class="chk"><input type="checkbox" data-val="Ninguna"> Ninguna</label><label class="chk"><input type="checkbox" data-val="Se ignora"> Se ignora</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">ACCIDENTE (SI APLICA)</div><div class="secbody">
+          <div class="frow"><span class="flabel">¿Accidente de vehículo de motor?</span><div class="chk-group" data-field="violencia.esAccidenteVehicular"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel">La/el lesionada(o) es:</span><div class="chk-group" data-field="violencia.lesionadoEs"><label class="chk"><input type="checkbox" data-val="Conductor"> Conductor</label><label class="chk"><input type="checkbox" data-val="Ocupante"> Ocupante</label><label class="chk"><input type="checkbox" data-val="Peatón"> Peatón</label></div></div>
+          <div class="frow"><span class="flabel">Uso de equipo de seguridad:</span><div class="chk-group" data-field="violencia.usoEquipoSeguridad"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label><label class="chk"><input type="checkbox" data-val="Se ignora"> Se ignora</label></div><span class="flabel">¿Cuál?:</span><input class="uline" style="flex:1" data-rw="violencia.equipoSeguridad"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">VIOLENCIA (SI APLICA)</div><div class="secbody">
+          <div class="frow"><span class="flabel">Tipo:</span><div class="chk-group" data-field="violencia.tipo"><label class="chk"><input type="checkbox" data-val="Física"> Física</label><label class="chk"><input type="checkbox" data-val="Sexual"> Sexual</label><label class="chk"><input type="checkbox" data-val="Psicológica"> Psicológica</label><label class="chk"><input type="checkbox" data-val="Económica/patrimonial"> Económica</label><label class="chk"><input type="checkbox" data-val="Abandono y/o negligencia"> Abandono/negligencia</label></div></div>
+          <div class="frow"><span class="flabel">Núm. de agresores:</span><div class="chk-group" data-field="violencia.numAgresores"><label class="chk"><input type="checkbox" data-val="Único(a)"> Único(a)</label><label class="chk"><input type="checkbox" data-val="Más de uno(a)"> Más de uno(a)</label></div><span class="flabel">Parentesco con agresor(a):</span><input class="uline" style="flex:1" data-rw="violencia.parentescoAgresor"></div>
+          <div class="frow"><span class="flabel">Sexo del/la agresor(a):</span><div class="chk-group" data-field="violencia.sexoAgresor"><label class="chk"><input type="checkbox" data-val="Masculino"> Masculino</label><label class="chk"><input type="checkbox" data-val="Femenino"> Femenino</label></div><span class="flabel">Edad del/la agresor(a):</span><input class="uline" style="width:65px" data-rw="violencia.edadAgresor"></div>
+          <div class="frow"><span class="flabel">Agresor(a) bajo efectos de:</span><div class="chk-group" data-field="violencia.agresorBajoEfectos"><label class="chk"><input type="checkbox" data-val="Alcohol"> Alcohol</label><label class="chk"><input type="checkbox" data-val="Drogas ilegales"> Drogas ilegales</label><label class="chk"><input type="checkbox" data-val="Ninguna"> Ninguna</label><label class="chk"><input type="checkbox" data-val="Se ignora"> Se ignora</label></div></div>
+          <div class="frow"><span class="flabel">En caso de evento autoinfligido, ocurrió:</span><div class="chk-group" data-field="violencia.eventoAutoinfligido"><label class="chk"><input type="checkbox" data-val="Única vez"> Única vez</label><label class="chk"><input type="checkbox" data-val="Repetido"> Repetido</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">ATENCIÓN</div><div class="secbody">
+          <div class="frow"><span class="flabel">Fecha y hora de atención:</span><input class="uline" style="width:100px" data-p="fechaIngreso" readonly><input class="uline" style="width:70px" data-p="horaIngreso" readonly><span class="flabel">Servicio que otorgó la atención:</span><div class="chk-group" data-field="violencia.servicioAtencion"><label class="chk"><input type="checkbox" data-val="Urgencias"> Urgencias</label><label class="chk"><input type="checkbox" data-val="Consulta externa"> Consulta externa</label><label class="chk"><input type="checkbox" data-val="Hospitalización"> Hospitalización</label><label class="chk"><input type="checkbox" data-val="Otro servicio"> Otro</label></div></div>
+          <div class="frow"><span class="flabel">Tipo de atención:</span><div class="chk-group" data-field="violencia.tipoAtencion"><label class="chk"><input type="checkbox" data-val="Médica"> Médica</label><label class="chk"><input type="checkbox" data-val="Psicológica"> Psicológica</label><label class="chk"><input type="checkbox" data-val="Quirúrgica"> Quirúrgica</label><label class="chk"><input type="checkbox" data-val="Psiquiátrica"> Psiquiátrica</label><label class="chk"><input type="checkbox" data-val="Consejería"> Consejería</label><label class="chk"><input type="checkbox" data-val="Profilaxis VIH"> Profilaxis VIH</label><label class="chk"><input type="checkbox" data-val="IVE (Interrupción Voluntaria del Embarazo)"> IVE</label></div></div>
+          <div class="frow"><span class="flabel">Área anatómica de mayor gravedad:</span><input class="uline" style="flex:1" data-rw="violencia.areaAnatomicaGravedad"></div>
+          <div class="frow"><span class="flabel">Consecuencia resultante de mayor gravedad:</span><input class="uline" style="flex:1" data-rw="violencia.consecuenciaGravedad"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">AFECCIONES TRATADAS</div><div class="secbody">
+          <div class="frow"><span class="flabel">Afección principal:</span><input class="uline" style="flex:1" data-p="diagnosticoIngreso" readonly></div>
+          <div style="font-size:11px;padding-left:10px">
+            1. <input class="uline" style="width:90%" data-p="comorbilidad1" readonly><br>
+            2. <input class="uline" style="width:90%" data-p="comorbilidad2" readonly><br>
+            3. <input class="uline" style="width:90%" data-p="comorbilidad3" readonly>
+          </div>
+          <div class="frow" style="margin-top:5px"><span class="flabel">Causa externa:</span><textarea class="inp" rows="2" style="flex:1;resize:vertical" data-rw="violencia.causaExterna"></textarea></div>
+          <div class="frow"><span class="flabel">Se dio aviso al Ministerio Público:</span><div class="chk-group" data-field="violencia.avisoMP"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">Destino después de la atención:</span><div class="chk-group" data-field="violencia.destino"><label class="chk"><input type="checkbox" data-val="Domicilio"> Domicilio</label><label class="chk"><input type="checkbox" data-val="Hospitalización"> Hospitalización</label><label class="chk"><input type="checkbox" data-val="Traslado a otra unidad médica"> Traslado</label><label class="chk"><input type="checkbox" data-val="DIF"> DIF</label><label class="chk"><input type="checkbox" data-val="Ministerio público"> Ministerio público</label><label class="chk"><input type="checkbox" data-val="Defunción"> Defunción</label></div><span class="flabel">Folio cert.:</span><input class="uline" style="width:100px" data-rw="violencia.folioCertificadoViolencia"></div>
+          <div class="frow"><span class="flabel">Responsable de la atención:</span><div class="chk-group" data-field="violencia.responsableAtencion"><label class="chk"><input type="checkbox" data-val="Médica(o) tratante"> Médica(o)</label><label class="chk"><input type="checkbox" data-val="Psicóloga(o) tratante"> Psicóloga(o)</label><label class="chk"><input type="checkbox" data-val="Trabajadora o trabajador social"> Trabajo social</label><label class="chk"><input type="checkbox" data-val="Otro"> Otro</label></div></div>
+        </div></div>
+
+        <div style="font-size:11px;color:#445;border-top:1px solid #1a2233;padding-top:7px;margin-top:5px">
+          Nombre: <span data-p="medico"></span> — CURP <span data-p="curpMedico"></span> — Cédula <span data-p="cedulaMedico"></span> — Firma: _______________
+        </div>
+        <div style="font-size:9px;color:#889;margin-top:3px">La/el profesional de la salud responsable de la atención prestada, quien llena este formato, no fue testigo de los hechos, sólo se limita a transcribir la información descrita verbalmente por la/el paciente afectado(a) en los apartados paciente afectado(a) y evento.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ REFERENCIA Y CONTRARREFERENCIA ============ -->
+  <div id="tab-referencia" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.4in">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:3px">
+          <div style="font-weight:700;color:#1b3f8b">INSTITUTO DE SALUD PÚBLICA DEL ESTADO DE GUANAJUATO</div>
+          <div>F-SR/CR-1</div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:38px;width:auto">
+        </div>
+        <div style="text-align:center;font-size:14px;font-weight:800;color:#1a2233;margin-bottom:7px">FORMATO DE REFERENCIA Y CONTRARREFERENCIA</div>
+
+        <div class="sec"><div class="sechd">UNIDAD QUE REFIERE</div><div class="secbody">
+          <div class="frow"><span class="flabel">Unidad de salud:</span><input class="uline" style="flex:1" data-p="institucion" readonly><span class="flabel">Núm. solicitud:</span><input class="uline" style="width:100px" data-rw="numeroSolicitud"></div>
+          <div class="frow"><span class="flabel">Fecha de ref.:</span><input class="uline" style="width:100px" data-p="fechaIngreso" readonly><span class="flabel">Hora:</span><input class="uline" style="width:70px" data-p="horaIngreso" readonly><span class="flabel">Médico que refiere:</span><input class="uline" style="flex:1" data-p="medico" readonly></div>
+          <div class="frow"><span class="flabel">Urgencia:</span><div class="chk-group" data-field="prioridadTraslado"><label class="chk"><input type="checkbox" data-val="Prioritaria"> Prioritaria</label><label class="chk"><input type="checkbox" data-val="Ordinaria"> Ordinaria</label></div><label class="chk" style="margin-left:10px"><input type="checkbox" id="chk-embarazo-alto-riesgo"> Embarazo de alto riesgo</label></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">PACIENTE</div><div class="secbody">
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-combo="apellidoPaterno apellidoMaterno nombre" readonly><span class="flabel">Expediente:</span><input class="uline" style="width:100px" data-p="expediente" readonly></div>
+          <div class="frow"><span class="flabel">CURP:</span><input class="uline" style="width:185px" data-p="curp" readonly><span class="flabel">F. nacimiento:</span><input class="uline" style="width:100px" data-p="fechaNacimiento" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> Femenino</label><label class="chk"><input type="checkbox" data-val="Masculino"> Masculino</label><label class="chk"><input type="checkbox" data-val="No binario"> No binario</label></div></div>
+          <div class="frow"><span class="flabel">Domicilio:</span><input class="uline" style="flex:1" data-p="domicilio" readonly><span class="flabel">Teléfono:</span><input class="uline" style="width:130px" data-p="telefono" readonly></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">MOTIVO DE LA REFERENCIA (RESUMEN CLÍNICO)</div><div class="secbody">
+          <div class="frow"><span class="flabel">T.A.:</span><input class="uline" style="width:70px" data-p="ta" readonly><span class="flabel">F.C.:</span><input class="uline" style="width:55px" data-p="fc" readonly><span class="flabel">F.R.:</span><input class="uline" style="width:55px" data-p="fr" readonly><span class="flabel">Temp.:</span><input class="uline" style="width:55px" data-p="temp" readonly><span class="flabel">SpO2:</span><input class="uline" style="width:55px" data-p="spo2" readonly><span class="flabel">Peso:</span><input class="uline" style="width:60px" data-rw="peso"><span class="flabel">Talla:</span><input class="uline" style="width:60px" data-rw="talla"><span class="flabel">Alergias:</span><input class="uline" style="flex:1" data-p="alergias" readonly></div>
+          <textarea class="inp" rows="5" style="resize:vertical;margin-top:7px" placeholder="Resumen clínico del padecimiento, exploración física, paraclínicos..." data-rw="motivoReferenciaDetalle"></textarea>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DIAGNÓSTICO Y SOLICITUD</div><div class="secbody">
+          <div class="frow"><span class="flabel">Diagnóstico:</span><input class="uline" style="flex:1" data-p="diagnosticoIngreso" readonly></div>
+          <div class="frow"><span class="flabel">Especialidad/servicio solicitado:</span><input class="uline" style="flex:1" data-rw="especialidadReferida"></div>
+          <div class="frow"><span class="flabel">Procedimiento solicitado:</span><input class="uline" style="flex:1" data-rw="procedimientoSolicitadoReferencia"></div>
+          <div class="frow"><span class="flabel">Unidad de salud a la que se refiere:</span><input class="uline" style="flex:1" data-rw="unidadReferida"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">CONTRARREFERENCIA — RESPUESTA DE LA UNIDAD RECEPTORA</div><div class="secbody">
+          <div class="frow"><span class="flabel">Tratamiento empleado:</span><input class="uline" style="flex:1" data-rw="tratamientoEmpleado"></div>
+          <div class="frow"><span class="flabel">Procedimiento terapéutico / Qx. realizado:</span><input class="uline" style="flex:1" data-rw="procedimientoTerapeutico"></div>
+          <div class="frow"><span class="flabel">Recursos especiales (prótesis, medicamentos, sangre):</span><input class="uline" style="flex:1" data-rw="recursosEspeciales"></div>
+        </div></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:22px">
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del médico que refiere<br><span data-p="medico"></span></div>
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre del profesional que acepta la referencia<br><input class="uline" style="width:90%" data-rw="medicoAcepta"></div>
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del director de la unidad</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-content -->
+
+<script src="app.js"></script>
+</body>
+</html>
