@@ -414,9 +414,15 @@ function renderNotas() {
         <input type="datetime-local" value="${nota.fechaHora || ''}" data-nota-idx="${i}" data-nota-key="fechaHora" style="border:1px solid #c7cedb;border-radius:5px;padding:3px 6px;font-size:11px">
         <button class="btn-rm-nota" onclick="removeNota(${i})">eliminar</button>
       </div>
-      <textarea class="inp" rows="4" style="resize:vertical" data-nota-idx="${i}" data-nota-key="texto" placeholder="Evolución...">${nota.texto || ''}</textarea>
+      <textarea class="inp" style="min-height:80px;resize:none;overflow:hidden" data-nota-idx="${i}" data-nota-key="texto" placeholder="Evolución...">${nota.texto || ''}</textarea>
     `;
     container.appendChild(row);
+  });
+
+  // Auto-altura inicial para notas con texto existente
+  container.querySelectorAll('textarea').forEach(ta => {
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
   });
 
   container.querySelectorAll('[data-nota-idx]').forEach(el => {
@@ -432,6 +438,10 @@ function renderNotas() {
       const key = this.dataset.notaKey;
       patient.notas[idx][key] = this.value;
       savePatient();
+      if (this.tagName === 'TEXTAREA') {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+      }
       requestAnimationFrame(checkNotasOverflow);
     });
   });

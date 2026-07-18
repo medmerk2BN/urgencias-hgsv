@@ -25,7 +25,7 @@ a{color:#1b3f8b}
 .tab-pane.active{display:block}
 
 /* ---- PRINT BUTTON ---- */
-#btn-print{position:sticky;top:70px;z-index:10;float:right;margin-bottom:10px;border:none;background:#1b3f8b;color:#fff;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px #0003}
+#btn-print{border:none;background:#1b3f8b;color:#fff;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px #0003}
 
 /* ---- CAPTURA ---- */
 .captura-card{background:#fff;border-radius:12px;padding:24px 28px;box-shadow:0 1px 3px #0002}
@@ -134,11 +134,11 @@ a{color:#1b3f8b}
 
 <!-- ===== CONTENT ===== -->
 <div id="main-content">
-  <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:10px">
-    <div id="notas-overflow-badge" style="display:none;background:#fff3cd;border:1px solid #e6a817;border-radius:7px;padding:5px 11px;font-size:12px;font-weight:600;color:#7a5200;gap:6px;align-items:center">
-      <span>⚠</span> La nota ocupará más de una hoja — puedes imprimir en doble cara
+  <div style="position:sticky;top:70px;z-index:10;display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:10px;pointer-events:none">
+    <div id="notas-overflow-badge" style="display:none;background:#fff3cd;border:1px solid #e6a817;border-radius:7px;padding:5px 11px;font-size:12px;font-weight:600;color:#7a5200;gap:6px;align-items:center;pointer-events:auto">
+      ⚠ La nota ocupará más de una hoja — puedes imprimir en doble cara
     </div>
-    <button id="btn-print" onclick="handlePrint()" style="display:none;position:static;float:none;margin:0">Imprimir / Guardar PDF</button>
+    <button id="btn-print" onclick="handlePrint()" style="display:none;border:none;background:#1b3f8b;color:#fff;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px #0003;pointer-events:auto">Imprimir / Guardar PDF</button>
   </div>
 
   <!-- ===== MODAL DOBLE CARA ===== -->
