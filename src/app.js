@@ -401,6 +401,12 @@ function buildCapturaForm() {
   });
 }
 
+// ---- HELPERS ----
+function autoResize(ta) {
+  ta.style.height = '0';                               // colapsa primero
+  ta.style.height = Math.max(80, ta.scrollHeight) + 'px'; // crece al contenido
+}
+
 // ---- NOTAS DE EVOLUCIÓN ----
 function renderNotas() {
   const container = document.getElementById('notas-container');
@@ -420,10 +426,7 @@ function renderNotas() {
   });
 
   // Auto-altura inicial para notas con texto existente
-  container.querySelectorAll('textarea').forEach(ta => {
-    ta.style.height = 'auto';
-    ta.style.height = ta.scrollHeight + 'px';
-  });
+  container.querySelectorAll('textarea').forEach(autoResize);
 
   container.querySelectorAll('[data-nota-idx]').forEach(el => {
     el.addEventListener('change', function() {
@@ -438,10 +441,7 @@ function renderNotas() {
       const key = this.dataset.notaKey;
       patient.notas[idx][key] = this.value;
       savePatient();
-      if (this.tagName === 'TEXTAREA') {
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
-      }
+      if (this.tagName === 'TEXTAREA') autoResize(this);
       requestAnimationFrame(checkNotasOverflow);
     });
   });
@@ -502,16 +502,30 @@ function nuevoPaciente() {
 }
 
 // ---- OVERFLOW INDICATOR ----
+let _overflowTimer = null;
 function checkNotasOverflow() {
-  const badge = document.getElementById('notas-overflow-badge');
-  if (!badge) return;
-  if (currentTab !== 'evolucion') { badge.style.display = 'none'; return; }
-  const docPage = document.querySelector('#tab-evolucion .doc-page');
-  if (!docPage) { badge.style.display = 'none'; return; }
-  // Letter page at 96dpi = 1056px; minus 0.5in padding top+bottom (96px) = ~960px content area.
-  // If scrollHeight exceeds that the note will spill onto a second sheet.
-  const overflows = docPage.scrollHeight > 960;
-  badge.style.display = overflows ? 'flex' : 'none';
+  clearTimeout(_overflowTimer);
+  _overflowTimer = setTimeout(() => {
+    const badge = document.getElementById('notas-overflow-badge');
+    if (!badge || currentTab !== 'evolucion') { if (badge) badge.style.display = 'none'; return; }
+
+    // Leer estado actual dentro del timeout (cancela resultados de checks anteriores)
+    const hasText = (patient.notas || []).some(n => (n.texto || '').trim().length > 0);
+    if (!hasText) { badge.style.display = 'none'; return; }
+
+    const notasContainer = document.getElementById('notas-container');
+    const docPage = document.querySelector('#tab-evolucion .doc-page');
+    if (!notasContainer || !docPage) { badge.style.display = 'none'; return; }
+
+    // Carta imprimible: 11in - márgenes @page (0.45×2) - padding doc (.5×2) = 9.1in × 96 ≈ 874px contenido
+    // distancia desde el tope del doc-page hasta el tope del notas-container
+    const docRect = docPage.getBoundingClientRect();
+    const notasRect = notasContainer.getBoundingClientRect();
+    const notasTopFromDoc = Math.max(0, notasRect.top - docRect.top);
+    const available = Math.max(150, 874 - notasTopFromDoc - 95); // 95 = padding-bottom + footer
+
+    badge.style.display = (notasContainer.scrollHeight > available) ? 'flex' : 'none';
+  }, 150);
 }
 
 // ---- PRINT FLOW ----
