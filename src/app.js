@@ -195,6 +195,7 @@ function defaultPatient() {
     infeccionIntrahospitalaria:'', tipoAnestesia:'', violenciaYLesionHosp:'', folioLesionesHosp:'',
     procedimientoHosp1:'', procedimientoHosp2:'', procedimientoHosp3:'', procedimientoHosp4:'', procedimientoHosp5:'',
     atencionObstetricaAplica:'', historiaGinecobstetrica:'', planificacionFamiliar:'',
+    observaciones:'',
     notas:[],
     lab:{ selected:{} },
     xray:{ rayosX:'', ultrasonido:'', mastografia:'', otros:'', otrosModalidad:'', tomografia:'', tomografiaModalidad:'', urea:'', creatinina:'', justificacion:'', portatil:'' },
@@ -240,6 +241,7 @@ function switchTab(tab) {
   document.getElementById('tab-' + tab).classList.add('active');
   document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
   document.getElementById('btn-print').style.display = tab === 'captura' ? 'none' : 'block';
+  document.getElementById('btn-preview').style.display = tab === 'captura' ? 'none' : 'block';
   currentTab = tab;
   populateCurrentDoc();
 }
@@ -290,6 +292,8 @@ function populateCurrentDoc() {
   if (currentTab === 'evolucion') {
     renderNotas();
     requestAnimationFrame(checkNotasOverflow);
+    const obsTa = document.getElementById('observaciones-ta');
+    if (obsTa) autoResize(obsTa);
   }
 
   // Lab checklist
@@ -529,11 +533,40 @@ function checkNotasOverflow() {
 }
 
 // ---- PRINT FLOW ----
+// Tabs que se imprimen en oficio (legal 8.5"×14")
+const LEGAL_TABS = new Set(['diaria', 'hospitalizacion', 'violencia']);
+
+function getPrintOpts(extraOpts) {
+  const isLegal = LEGAL_TABS.has(currentTab);
+  const pageSize = isLegal ? 'Legal' : 'Letter';
+  // Altura objetivo en px a 96dpi: legal≈1344, carta≈1056
+  const targetH = (isLegal ? 14 : 11) * 96;
+  const docPage = document.querySelector('#tab-' + currentTab + ' .doc-page');
+  let scaleFactor = 100;
+  if (docPage && docPage.scrollHeight > targetH * 0.9) {
+    scaleFactor = Math.max(50, Math.floor((targetH * 0.92 / docPage.scrollHeight) * 100));
+  }
+  // Inyectar @page size para el fallback window.print()
+  let s = document.getElementById('_print_page_style');
+  if (!s) { s = document.createElement('style'); s.id = '_print_page_style'; document.head.appendChild(s); }
+  s.textContent = '@media print{@page{size:' + (isLegal ? 'legal' : 'letter') + ' portrait;margin:.25in}}';
+  return Object.assign({ pageSize, scaleFactor }, extraOpts || {});
+}
+
+async function doPrint(extraOpts) {
+  const opts = getPrintOpts(extraOpts);
+  if (window.electronAPI) {
+    await window.electronAPI.print(opts);
+  } else {
+    window.print();
+  }
+}
+
 function handlePrint() {
-  if (currentTab !== 'evolucion') { window.print(); return; }
+  if (currentTab !== 'evolucion') { doPrint(); return; }
   const docPage = document.querySelector('#tab-evolucion .doc-page');
   const overflows = docPage && docPage.scrollHeight > 960;
-  if (!overflows) { window.print(); return; }
+  if (!overflows) { doPrint(); return; }
   openDuplexModal();
 }
 
@@ -551,7 +584,7 @@ function closeDuplexModal() {
 
 function printNormal() {
   closeDuplexModal();
-  window.print();
+  doPrint();
 }
 
 function duplexStep1() {
@@ -561,22 +594,53 @@ function duplexStep1() {
 
 async function printAnverso() {
   document.getElementById('duplex-step-1').style.display = 'none';
-  if (window.electronAPI) {
-    await window.electronAPI.print({ pageRanges: [{ from: 0, to: 0 }], silent: false });
-  } else {
-    window.print(); // fallback: no Electron context
-  }
+  await doPrint({ pageRanges: [{ from: 0, to: 0 }], silent: false });
   document.getElementById('duplex-step-2').style.display = 'block';
 }
 
 async function printReverso() {
   document.getElementById('duplex-step-2').style.display = 'none';
-  if (window.electronAPI) {
-    await window.electronAPI.print({ pageRanges: [{ from: 1, to: 999 }], silent: false });
-  } else {
-    window.print();
-  }
+  await doPrint({ pageRanges: [{ from: 1, to: 999 }], silent: false });
   document.getElementById('duplex-step-3').style.display = 'block';
+}
+
+// ---- PRINT PREVIEW ----
+function openPreview() {
+  const docPage = document.querySelector('#tab-' + currentTab + ' .doc-page');
+  if (!docPage) return;
+
+  // Snapshot current input values into DOM so the clone picks them up
+  docPage.querySelectorAll('input').forEach(el => el.setAttribute('value', el.value));
+  docPage.querySelectorAll('textarea').forEach(el => { el.textContent = el.value; });
+
+  const clone = docPage.cloneNode(true);
+
+  // Hide interactive controls in clone
+  clone.querySelectorAll('button').forEach(el => el.style.display = 'none');
+  clone.querySelectorAll('input, textarea').forEach(el => {
+    el.style.pointerEvents = 'none';
+    el.removeAttribute('placeholder');
+  });
+
+  const previewDoc = document.getElementById('preview-doc');
+  previewDoc.innerHTML = '';
+  previewDoc.appendChild(clone);
+
+  document.getElementById('preview-modal').style.display = 'flex';
+
+  requestAnimationFrame(() => {
+    const modal = document.getElementById('preview-modal');
+    const availW = modal.offsetWidth * 0.9;
+    const scale = Math.min(1, availW / clone.offsetWidth);
+    clone.style.transform = 'scale(' + scale + ')';
+    clone.style.transformOrigin = 'top left';
+    previewDoc.style.width = (clone.offsetWidth * scale) + 'px';
+    previewDoc.style.height = (clone.offsetHeight * scale) + 'px';
+  });
+}
+
+function closePreview() {
+  document.getElementById('preview-modal').style.display = 'none';
 }
 
 // ---- INIT ----
