@@ -197,6 +197,13 @@ function defaultPatient() {
     atencionObstetricaAplica:'', historiaGinecobstetrica:'', planificacionFamiliar:'',
     observaciones:'',
     notas:[],
+    ee:{
+      antirrabico:{ folio:'', fecha:'', unidad:'', jurisdiccion:'', referidoDe:'', referidoA:'', tratamientoPrevio:'', numDosis:'', fechaUltimaDosis:'', fechaExposicion:'', tipoExposicion:'', localizacionMordedura:'', tipoHerida:'', especieAnimal:'', edadAnimal:'', sexoAnimal:'', animalVacunado:'', localizacionAnimal:'', examenClinico:'', fechaExamenClinico:'', diasObservacion:'', resultadoObservacion:'', examenLaboratorio:'', tipoExamenLab:'', fechaExamenLab:'', nombreMVZ:'', tipoVacuna:'', numLote:'', caducidad:'', dosisIndicadas:'', dosisAplicadas:'', fechaAplicacion:'', totalFrascos:'', gammaglobulina:'', gammaglobulinaDosis:'', vacunaTd:'', aceptoTratamiento:'', abandonoTratamiento:'', causaInterrupcion:'', motivoAgresion:'' },
+      eda:{ semanaNotificacion:'', hablaLenguaIndigena:'', cualLengua:'', ocupacion:'', nombreUnidad:'', jurisdiccion:'', procedencia:'', fechaPrimerContacto:'', esMigrante:'', paisNacionalidad:'', paisOrigen:'', casoBinacional:'', paisTransito:'', fechaIngresoPais:'', visitoOtrosLugares:'', cuantosLugares:'', especifiqueLugar:'', fechaInicio:'', semanaEpidemiologicaInicio:'', duracionDiarrea:'', numVomitos:'', fiebre:'', consistencia:'', color:'', aspecto:'', estadoHidratacion:'', choque:'', gradoDesnutricion:'', planHidratacion:'', tratamiento:'', cualAntibiotico:'', solucionesEmpleadas:'', alimentosConsumidos:'', tipoHielo:'', fechaConsumo:'', domicilioConsumo:'', lugarConsumo:'', procedenciaAgua:'', eliminacionExcretas:'', contacto1Nombre:'', contacto1Edad:'', contacto1Sexo:'', contacto1Tipo:'', contacto2Nombre:'', contacto2Edad:'', contacto2Sexo:'', contacto2Tipo:'', contacto3Nombre:'', contacto3Edad:'', contacto3Sexo:'', contacto3Tipo:'', contacto4Nombre:'', contacto4Edad:'', contacto4Sexo:'', contacto4Tipo:'', bloqueoFamiliar:'', cloracionDepositos:'', manejoExcretas:'', hisopoContactos:'', quimioprofilaxis:'', tomaHisopo:'', resultadoLab:'', defuncion:'' },
+      vectores:{ rfc:'', esIndigena:'', cualLengua:'', claveUnidad:'', jurisdiccion:'', dxInicialHospitalario:'', estadoNacimiento:'', municipioNacimiento:'', domicilioResidencia:'', colonia:'', cp:'', ocupacion:'', clasificacion:'', tipoCaso:'', otroEstado:'', otroPais:'', otraJurisdiccion:'', fechaInicioSintomas:'', fechaInicioFiebre:'', fechaInicioAlarma:'', fechaInicioGrave:'', lugaresVisitados:'', semanasGestacion:'', fechaUltimaRegla:'', sintomas:'', comorbilidad:'', hto:'', hb:'', plaquetas:'', albumina:'', leucocitos:'', linfocitos:'', dhl:'', alt:'', ast:'', bilirrubinaDirecta:'', bilirrubinaTotal:'', fechaUltrasonido:'', fechaRadiografia:'', liquidoCavidades:'', tipoMuestraLab:'', fechaTomaMuestra:'', diasTransito:'', muestraRechazada:'', fechaRecepcion:'', muestraTomada:'', folioCaso:'', altaVoluntaria:'', defuncion:'', fechaDefuncion:'' },
+      irag:{ ocupacion:'', seReconoceIndigena:'', hablaLenguaIndigena:'', tipoPaciente:'', esMigrante:'', paisNacionalidad:'', paisNacimiento:'', entidadNacimiento:'', paisesTransito:'', fechaIngresoMexico:'', institucionEducativa:'', embarazada:'', mesesEmbarazo:'', puerperio:'', diasPuerperio:'', fechaInicioSintomas:'', viajeReciente:'', contactoRespiratorio:'', contactoAnimales:'', vacunaInfluenza:'', vacunaCovid:'', cuantasDosis:'', marcaVacuna:'', fecha1aDosis:'', fecha2aDosis:'', dosisRefuerzo:'', sintomas:'', comorbilidad:'', neumonia:'', uci:'', intubado:'', tratamientoAntipireticos:'', tratamientoAntivirales:'', inicioTratamientoAntiviral:'', antiviralSeleccionado:'', tratamientoAntimicrobianos:'', muestraTomada:'', tipoMuestra:'', fechaTomaMuestra:'', laboratorioProcesamiento:'', resultadoMuestra:'', muestraAntigeno:'', resultadoAntigeno:'', covidClinicoEpidemiologico:'', evolucion:'', defuncion:'', folioCertificadoDefuncion:'' },
+      ponzonoso:{ fechaNotificacion:'', horaNotificacion:'', folioPlataforma:'', institucionTratante:'', rfc:'', seguridadSocial:'', sector:'', manzana:'', embarazoActual:'', semanaGestacion:'', esMigrante:'', paisOrigen:'', nacionalidad:'', puebloEtnia:'', hablaLenguaOriginaria:'', puebloOriginarioCual:'', sabeLeer:'', ocupacionActual:'', comorbilidades:'', tratamientoPrevio:'', fechaTratamientoPrevio:'', agenteInvolucradoPrevio:'', entidadIntoxicacion:'', coloniaIntoxicacion:'', calleIntoxicacion:'', numIntIntoxicacion:'', fechaIntoxicacion:'', horaIntoxicacion:'', momentoIntoxicacion:'', sitioOcurrio:'', actividadRealizando:'', sitioAgente:'', interrogatorio:'', nombreFamiliar:'', regionCorporal:'', agenteCausal:'', clasificacionGravedad:'', sintomas:'', fechaInicioCuadro:'', horaInicioSintomas:'', tipoAtencion:'', tiempoHospitalizacion:'', traslado:'', lugarTraslado:'', motivoTraslado:'', fechaTraslado:'', folioCertificadoDefuncion:'', vacunaAntitetanica:'', fechaVacunaAntitetanica:'', tipoAntidoto:'', horaAntidoto:'', numFrascos:'', viaAdministracion:'', loteAntidoto:'', caducidadAntidoto:'', otrosMedicamentos:'', observacionesTratamiento:'', estadoAnimal:'', enviadoLaboratorio:'', especieTaxonomica:'', porQuienTaxonomico:'', notaLaboratorio:'' }
+    },
     lab:{ selected:{} },
     xray:{ rayosX:'', ultrasonido:'', mastografia:'', otros:'', otrosModalidad:'', tomografia:'', tomografiaModalidad:'', urea:'', creatinina:'', justificacion:'', portatil:'' },
     violencia:{ fecha:'', hora:'', sitio:'', intencionalidad:'', agente:'', tipo:'', parentescoAgresor:'', servicioAtencion:'', avisoMP:'', causaExterna:'', destino:'', escolaridad:'', sabeLeer:'', dificultadDiscapacidad:'', habaLenguaIndigena:'', referidoPor:'', nombreReferido:'', cluesReferido:'', fueDiaFestivo:'', municipioOcurrencia:'', localidadOcurrencia:'', cpOcurrencia:'', tipoVialidadOcurrencia:'', nombreVialidadOcurrencia:'', bajoEfectosPaciente:'', esAccidenteVehicular:'', lesionadoEs:'', usoEquipoSeguridad:'', equipoSeguridad:'', numAgresores:'', sexoAgresor:'', edadAgresor:'', agresorBajoEfectos:'', eventoAutoinfligido:'', tipoAtencion:'', areaAnatomicaGravedad:'', consecuenciaGravedad:'', folioCertificadoViolencia:'', responsableAtencion:'' }
@@ -207,6 +214,12 @@ let patient;
 try {
   const saved = JSON.parse(localStorage.getItem('urgencias_patient_v3') || 'null');
   patient = saved ? Object.assign(defaultPatient(), saved) : defaultPatient();
+  // deep-merge ee sub-objects so new fields get defaults even in saved records
+  const defEE = defaultPatient().ee;
+  patient.ee = Object.assign({}, defEE, patient.ee || {});
+  for (const k of Object.keys(defEE)) {
+    patient.ee[k] = Object.assign({}, defEE[k], (patient.ee[k] || {}));
+  }
 } catch(e) { patient = defaultPatient(); }
 
 let currentTab = 'captura';
@@ -216,9 +229,13 @@ function savePatient() {
 }
 
 function setField(key, value) {
-  if (key.includes('.')) {
-    const [ns, k] = key.split('.');
-    patient[ns][k] = value;
+  const parts = key.split('.');
+  if (parts.length === 3) {
+    if (!patient[parts[0]]) patient[parts[0]] = {};
+    if (!patient[parts[0]][parts[1]]) patient[parts[0]][parts[1]] = {};
+    patient[parts[0]][parts[1]][parts[2]] = value;
+  } else if (parts.length === 2) {
+    patient[parts[0]][parts[1]] = value;
   } else {
     patient[key] = value;
   }
@@ -227,9 +244,11 @@ function setField(key, value) {
 }
 
 function getField(key) {
-  if (key.includes('.')) {
-    const [ns, k] = key.split('.');
-    return (patient[ns] || {})[k] || '';
+  const parts = key.split('.');
+  if (parts.length === 3) {
+    return ((patient[parts[0]] || {})[parts[1]] || {})[parts[2]] || '';
+  } else if (parts.length === 2) {
+    return (patient[parts[0]] || {})[parts[1]] || '';
   }
   return patient[key] || '';
 }
@@ -295,6 +314,9 @@ function populateCurrentDoc() {
     const obsTa = document.getElementById('observaciones-ta');
     if (obsTa) autoResize(obsTa);
   }
+
+  // Auto-resize all data-rw textareas in the active pane
+  pane.querySelectorAll('textarea[data-rw]').forEach(ta => autoResize(ta));
 
   // Lab checklist
   if (currentTab === 'laboratorio') renderLab();
@@ -534,7 +556,7 @@ function checkNotasOverflow() {
 
 // ---- PRINT FLOW ----
 // Tabs que se imprimen en oficio (legal 8.5"×14")
-const LEGAL_TABS = new Set(['diaria', 'hospitalizacion', 'violencia']);
+const LEGAL_TABS = new Set(['diaria', 'hospitalizacion', 'violencia', 'antirrabico', 'vectores', 'irag', 'ponzonoso']);
 
 function getPrintOpts(extraOpts) {
   const isLegal = LEGAL_TABS.has(currentTab);

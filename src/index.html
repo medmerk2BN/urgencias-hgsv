@@ -129,6 +129,11 @@ a{color:#1b3f8b}
     <button class="tab-btn" data-tab="rayosx">Rayos X</button>
     <button class="tab-btn" data-tab="violencia">Violencia/Lesión</button>
     <button class="tab-btn" data-tab="referencia">Referencia</button>
+    <button class="tab-btn" data-tab="antirrabico">EE Antirrábico</button>
+    <button class="tab-btn" data-tab="eda">EE EDA</button>
+    <button class="tab-btn" data-tab="vectores">EE Vectores</button>
+    <button class="tab-btn" data-tab="irag">EE IRAG</button>
+    <button class="tab-btn" data-tab="ponzonoso">EE Ponzoñoso</button>
   </div>
 </div>
 
@@ -737,6 +742,316 @@ a{color:#1b3f8b}
           <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del médico que refiere<br><span data-p="medico"></span></div>
           <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre del profesional que acepta la referencia<br><input class="uline" style="width:90%" data-rw="medicoAcepta"></div>
           <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del director de la unidad</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========== EE ANTIRRÁBICO ========== -->
+  <div id="tab-antirrabico" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.4in">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:3px">
+          <div style="font-weight:700;color:#1b3f8b">INSTITUTO DE SALUD PÚBLICA DEL ESTADO DE GUANAJUATO</div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:38px;width:auto">
+        </div>
+        <div style="text-align:center;font-size:13px;font-weight:800;color:#1a2233;margin-bottom:6px">ESTUDIO EPIDEMIOLÓGICO DE RABIA HUMANA</div>
+
+        <div class="sec"><div class="sechd">DATOS DE LA UNIDAD</div><div class="secbody">
+          <div class="frow"><span class="flabel">Folio:</span><input class="uline" style="width:100px" data-rw="ee.antirrabico.folio"><span class="flabel">Fecha:</span><input class="uline" style="width:110px" data-rw="ee.antirrabico.fecha"><span class="flabel">Unidad:</span><input class="uline" style="flex:1" data-p="institucion" readonly><span class="flabel">Jurisdicción:</span><input class="uline" style="width:140px" data-rw="ee.antirrabico.jurisdiccion"></div>
+          <div class="frow"><span class="flabel">Referido de:</span><input class="uline" style="flex:1" data-rw="ee.antirrabico.referidoDe"><span class="flabel">Referido a:</span><input class="uline" style="flex:1" data-rw="ee.antirrabico.referidoA"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS DEL PACIENTE</div><div class="secbody">
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-combo="apellidoPaterno apellidoMaterno nombre" readonly><span class="flabel">Expediente:</span><input class="uline" style="width:100px" data-p="expediente" readonly></div>
+          <div class="frow"><span class="flabel">CURP:</span><input class="uline" style="width:185px" data-p="curp" readonly><span class="flabel">F. nac.:</span><input class="uline" style="width:100px" data-p="fechaNacimiento" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> F</label><label class="chk"><input type="checkbox" data-val="Masculino"> M</label></div></div>
+          <div class="frow"><span class="flabel">Domicilio:</span><input class="uline" style="flex:1" data-p="domicilio" readonly><span class="flabel">Tel.:</span><input class="uline" style="width:120px" data-p="telefono" readonly></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">TRATAMIENTO PREVIO ANTIRRÁBICO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Tratamiento previo:</span><div class="chk-group" data-field="ee.antirrabico.tratamientoPrevio"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:16px">Núm. dosis:</span><input class="uline" style="width:60px" data-rw="ee.antirrabico.numDosis"><span class="flabel">Fecha última dosis:</span><input class="uline" style="width:110px" data-rw="ee.antirrabico.fechaUltimaDosis"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS DE LA EXPOSICIÓN</div><div class="secbody">
+          <div class="frow"><span class="flabel">Fecha de exposición:</span><input class="uline" style="width:110px" data-rw="ee.antirrabico.fechaExposicion"><span class="flabel">Tipo:</span><div class="chk-group" data-field="ee.antirrabico.tipoExposicion"><label class="chk"><input type="checkbox" data-val="Mordedura"> Mordedura</label><label class="chk"><input type="checkbox" data-val="Arañazo"> Arañazo</label><label class="chk"><input type="checkbox" data-val="Lamedura"> Lamedura</label></div></div>
+          <div class="frow"><span class="flabel">Localización de la mordedura:</span><input class="uline" style="flex:1" data-rw="ee.antirrabico.localizacionMordedura"><span class="flabel">Tipo de herida:</span><div class="chk-group" data-field="ee.antirrabico.tipoHerida"><label class="chk"><input type="checkbox" data-val="Superficial"> Superficial</label><label class="chk"><input type="checkbox" data-val="Profunda"> Profunda</label><label class="chk"><input type="checkbox" data-val="Múltiple"> Múltiple</label></div></div>
+          <div class="frow"><span class="flabel">Motivo de la agresión:</span><input class="uline" style="flex:1" data-rw="ee.antirrabico.motivoAgresion"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS DEL ANIMAL AGRESOR</div><div class="secbody">
+          <div class="frow"><span class="flabel">Especie:</span><input class="uline" style="width:130px" data-rw="ee.antirrabico.especieAnimal"><span class="flabel">Edad aprox.:</span><input class="uline" style="width:80px" data-rw="ee.antirrabico.edadAnimal"><span class="flabel">Sexo:</span><div class="chk-group" data-field="ee.antirrabico.sexoAnimal"><label class="chk"><input type="checkbox" data-val="Macho"> Macho</label><label class="chk"><input type="checkbox" data-val="Hembra"> Hembra</label><label class="chk"><input type="checkbox" data-val="Desconocido"> Desconocido</label></div></div>
+          <div class="frow"><span class="flabel">¿Animal vacunado?</span><div class="chk-group" data-field="ee.antirrabico.animalVacunado"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label><label class="chk"><input type="checkbox" data-val="Desconocido"> Desconocido</label></div><span class="flabel" style="margin-left:16px">Localización del animal:</span><input class="uline" style="flex:1" data-rw="ee.antirrabico.localizacionAnimal"></div>
+          <div class="frow"><span class="flabel">Examen clínico del animal:</span><div class="chk-group" data-field="ee.antirrabico.examenClinico"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Fecha:</span><input class="uline" style="width:110px" data-rw="ee.antirrabico.fechaExamenClinico"><span class="flabel">Días observación:</span><input class="uline" style="width:60px" data-rw="ee.antirrabico.diasObservacion"><span class="flabel">Resultado:</span><input class="uline" style="flex:1" data-rw="ee.antirrabico.resultadoObservacion"></div>
+          <div class="frow"><span class="flabel">Examen de laboratorio:</span><div class="chk-group" data-field="ee.antirrabico.examenLaboratorio"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Tipo:</span><input class="uline" style="width:120px" data-rw="ee.antirrabico.tipoExamenLab"><span class="flabel">Fecha:</span><input class="uline" style="width:110px" data-rw="ee.antirrabico.fechaExamenLab"><span class="flabel">MVZ:</span><input class="uline" style="flex:1" data-rw="ee.antirrabico.nombreMVZ"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">VACUNACIÓN ANTIRRÁBICA HUMANA</div><div class="secbody">
+          <div class="frow"><span class="flabel">Tipo de vacuna:</span><input class="uline" style="flex:1" data-rw="ee.antirrabico.tipoVacuna"><span class="flabel">Lote:</span><input class="uline" style="width:100px" data-rw="ee.antirrabico.numLote"><span class="flabel">Caducidad:</span><input class="uline" style="width:100px" data-rw="ee.antirrabico.caducidad"></div>
+          <div class="frow"><span class="flabel">Dosis indicadas:</span><input class="uline" style="width:60px" data-rw="ee.antirrabico.dosisIndicadas"><span class="flabel">Dosis aplicadas:</span><input class="uline" style="width:60px" data-rw="ee.antirrabico.dosisAplicadas"><span class="flabel">Fecha 1ª aplicación:</span><input class="uline" style="width:110px" data-rw="ee.antirrabico.fechaAplicacion"><span class="flabel">Total frascos:</span><input class="uline" style="width:60px" data-rw="ee.antirrabico.totalFrascos"></div>
+          <div class="frow"><span class="flabel">Gammaglobulina:</span><div class="chk-group" data-field="ee.antirrabico.gammaglobulina"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Dosis:</span><input class="uline" style="width:80px" data-rw="ee.antirrabico.gammaglobulinaDosis"><span class="flabel">Vacuna Td:</span><div class="chk-group" data-field="ee.antirrabico.vacunaTd"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">SEGUIMIENTO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Aceptó tratamiento:</span><div class="chk-group" data-field="ee.antirrabico.aceptoTratamiento"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:16px">Abandono:</span><div class="chk-group" data-field="ee.antirrabico.abandonoTratamiento"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:16px">Causa de interrupción:</span><input class="uline" style="flex:1" data-rw="ee.antirrabico.causaInterrupcion"></div>
+        </div></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px">
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del médico responsable<br><span data-p="medico"></span></div>
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del responsable epidemiológico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== EE EDA ========== -->
+  <div id="tab-eda" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.4in">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:3px">
+          <div style="font-weight:700;color:#1b3f8b">INSTITUTO DE SALUD PÚBLICA DEL ESTADO DE GUANAJUATO</div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:38px;width:auto">
+        </div>
+        <div style="text-align:center;font-size:13px;font-weight:800;color:#1a2233;margin-bottom:6px">ESTUDIO EPIDEMIOLÓGICO DE ENFERMEDAD DIARREICA AGUDA (EDA)</div>
+
+        <div class="sec"><div class="sechd">DATOS DE LA UNIDAD</div><div class="secbody">
+          <div class="frow"><span class="flabel">Semana epidemiológica:</span><input class="uline" style="width:60px" data-rw="ee.eda.semanaNotificacion"><span class="flabel">Unidad:</span><input class="uline" style="flex:1" data-p="institucion" readonly><span class="flabel">Jurisdicción:</span><input class="uline" style="width:140px" data-rw="ee.eda.jurisdiccion"></div>
+          <div class="frow"><span class="flabel">Procedencia:</span><input class="uline" style="flex:1" data-rw="ee.eda.procedencia"><span class="flabel">Fecha 1er contacto:</span><input class="uline" style="width:110px" data-rw="ee.eda.fechaPrimerContacto"><span class="flabel">Ocupación:</span><input class="uline" style="flex:1" data-rw="ee.eda.ocupacion"></div>
+          <div class="frow"><span class="flabel">¿Habla lengua indígena?</span><div class="chk-group" data-field="ee.eda.hablaLenguaIndigena"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">¿Cuál?</span><input class="uline" style="width:130px" data-rw="ee.eda.cualLengua"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS DEL PACIENTE</div><div class="secbody">
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-combo="apellidoPaterno apellidoMaterno nombre" readonly><span class="flabel">Expediente:</span><input class="uline" style="width:100px" data-p="expediente" readonly></div>
+          <div class="frow"><span class="flabel">CURP:</span><input class="uline" style="width:185px" data-p="curp" readonly><span class="flabel">F. nac.:</span><input class="uline" style="width:100px" data-p="fechaNacimiento" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> F</label><label class="chk"><input type="checkbox" data-val="Masculino"> M</label></div></div>
+          <div class="frow"><span class="flabel">Domicilio:</span><input class="uline" style="flex:1" data-p="domicilio" readonly><span class="flabel">Tel.:</span><input class="uline" style="width:120px" data-p="telefono" readonly></div>
+          <div class="frow"><span class="flabel">¿Es migrante?</span><div class="chk-group" data-field="ee.eda.esMigrante"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">País de origen:</span><input class="uline" style="width:130px" data-rw="ee.eda.paisOrigen"><span class="flabel">País de tránsito:</span><input class="uline" style="flex:1" data-rw="ee.eda.paisTransito"><span class="flabel">F. ingreso:</span><input class="uline" style="width:100px" data-rw="ee.eda.fechaIngresoPais"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">CUADRO CLÍNICO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Fecha inicio síntomas:</span><input class="uline" style="width:110px" data-rw="ee.eda.fechaInicio"><span class="flabel">Sem. epid. inicio:</span><input class="uline" style="width:60px" data-rw="ee.eda.semanaEpidemiologicaInicio"><span class="flabel">Duración diarrea (días):</span><input class="uline" style="width:60px" data-rw="ee.eda.duracionDiarrea"><span class="flabel">Núm. vómitos:</span><input class="uline" style="width:60px" data-rw="ee.eda.numVomitos"></div>
+          <div class="frow"><span class="flabel">Fiebre:</span><div class="chk-group" data-field="ee.eda.fiebre"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Consistencia heces:</span><div class="chk-group" data-field="ee.eda.consistencia"><label class="chk"><input type="checkbox" data-val="Acuosa"> Acuosa</label><label class="chk"><input type="checkbox" data-val="Semilíquida"> Semilíquida</label><label class="chk"><input type="checkbox" data-val="Sólida"> Sólida</label></div></div>
+          <div class="frow"><span class="flabel">Color:</span><div class="chk-group" data-field="ee.eda.color"><label class="chk"><input type="checkbox" data-val="Normal"> Normal</label><label class="chk"><input type="checkbox" data-val="Amarillo"> Amarillo</label><label class="chk"><input type="checkbox" data-val="Verde"> Verde</label><label class="chk"><input type="checkbox" data-val="Con sangre"> Con sangre</label></div><span class="flabel" style="margin-left:12px">Aspecto:</span><div class="chk-group" data-field="ee.eda.aspecto"><label class="chk"><input type="checkbox" data-val="Mucoso"> Mucoso</label><label class="chk"><input type="checkbox" data-val="Fétido"> Fétido</label></div></div>
+          <div class="frow"><span class="flabel">Estado de hidratación:</span><div class="chk-group" data-field="ee.eda.estadoHidratacion"><label class="chk"><input type="checkbox" data-val="A"> A</label><label class="chk"><input type="checkbox" data-val="B"> B</label><label class="chk"><input type="checkbox" data-val="C"> C</label></div><span class="flabel" style="margin-left:12px">Choque:</span><div class="chk-group" data-field="ee.eda.choque"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Grado desnutrición:</span><input class="uline" style="width:80px" data-rw="ee.eda.gradoDesnutricion"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">TRATAMIENTO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Plan de hidratación:</span><div class="chk-group" data-field="ee.eda.planHidratacion"><label class="chk"><input type="checkbox" data-val="A"> A</label><label class="chk"><input type="checkbox" data-val="B"> B</label><label class="chk"><input type="checkbox" data-val="C"> C</label></div><span class="flabel" style="margin-left:12px">Tratamiento:</span><div class="chk-group" data-field="ee.eda.tratamiento"><label class="chk"><input type="checkbox" data-val="Antibiótico"> Antibiótico</label><label class="chk"><input type="checkbox" data-val="Antiparasitario"> Antiparasitario</label></div><span class="flabel" style="margin-left:12px">¿Cuál?</span><input class="uline" style="flex:1" data-rw="ee.eda.cualAntibiotico"></div>
+          <div class="frow"><span class="flabel">Soluciones empleadas:</span><input class="uline" style="flex:1" data-rw="ee.eda.solucionesEmpleadas"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">INVESTIGACIÓN EPIDEMIOLÓGICA</div><div class="secbody">
+          <div class="frow"><span class="flabel">Alimentos consumidos:</span><input class="uline" style="flex:1" data-rw="ee.eda.alimentosConsumidos"><span class="flabel">Tipo de hielo:</span><input class="uline" style="width:110px" data-rw="ee.eda.tipoHielo"><span class="flabel">Fecha consumo:</span><input class="uline" style="width:100px" data-rw="ee.eda.fechaConsumo"></div>
+          <div class="frow"><span class="flabel">Lugar de consumo:</span><input class="uline" style="flex:1" data-rw="ee.eda.lugarConsumo"><span class="flabel">Domicilio:</span><input class="uline" style="flex:1" data-rw="ee.eda.domicilioConsumo"></div>
+          <div class="frow"><span class="flabel">Procedencia del agua:</span><input class="uline" style="flex:1" data-rw="ee.eda.procedenciaAgua"><span class="flabel">Eliminación de excretas:</span><input class="uline" style="flex:1" data-rw="ee.eda.eliminacionExcretas"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">CONTACTOS DOMICILIARIOS</div><div class="secbody">
+          <div class="frow" style="font-size:10px;font-weight:700;color:#1a2233"><span style="flex:2">Nombre</span><span style="width:50px">Edad</span><span style="width:60px">Sexo</span><span style="flex:1">Tipo contacto</span></div>
+          <div class="frow"><input class="uline" style="flex:2" data-rw="ee.eda.contacto1Nombre"><input class="uline" style="width:50px" data-rw="ee.eda.contacto1Edad"><input class="uline" style="width:60px" data-rw="ee.eda.contacto1Sexo"><input class="uline" style="flex:1" data-rw="ee.eda.contacto1Tipo"></div>
+          <div class="frow"><input class="uline" style="flex:2" data-rw="ee.eda.contacto2Nombre"><input class="uline" style="width:50px" data-rw="ee.eda.contacto2Edad"><input class="uline" style="width:60px" data-rw="ee.eda.contacto2Sexo"><input class="uline" style="flex:1" data-rw="ee.eda.contacto2Tipo"></div>
+          <div class="frow"><input class="uline" style="flex:2" data-rw="ee.eda.contacto3Nombre"><input class="uline" style="width:50px" data-rw="ee.eda.contacto3Edad"><input class="uline" style="width:60px" data-rw="ee.eda.contacto3Sexo"><input class="uline" style="flex:1" data-rw="ee.eda.contacto3Tipo"></div>
+          <div class="frow"><input class="uline" style="flex:2" data-rw="ee.eda.contacto4Nombre"><input class="uline" style="width:50px" data-rw="ee.eda.contacto4Edad"><input class="uline" style="width:60px" data-rw="ee.eda.contacto4Sexo"><input class="uline" style="flex:1" data-rw="ee.eda.contacto4Tipo"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">ACCIONES REALIZADAS</div><div class="secbody">
+          <div class="frow"><span class="flabel">Bloqueo familiar:</span><div class="chk-group" data-field="ee.eda.bloqueoFamiliar"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Cloración de depósitos:</span><div class="chk-group" data-field="ee.eda.cloracionDepositos"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Manejo excretas:</span><div class="chk-group" data-field="ee.eda.manejoExcretas"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">Hisopo en contactos:</span><div class="chk-group" data-field="ee.eda.hisopoContactos"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Quimioprofilaxis:</span><div class="chk-group" data-field="ee.eda.quimioprofilaxis"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Toma de hisopo (caso):</span><div class="chk-group" data-field="ee.eda.tomaHisopo"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">Resultado laboratorio:</span><input class="uline" style="flex:1" data-rw="ee.eda.resultadoLab"><span class="flabel">Defunción:</span><div class="chk-group" data-field="ee.eda.defuncion"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px">
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del médico responsable<br><span data-p="medico"></span></div>
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del responsable epidemiológico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== EE VECTORES ========== -->
+  <div id="tab-vectores" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.4in">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:3px">
+          <div style="font-weight:700;color:#1b3f8b">INSTITUTO DE SALUD PÚBLICA DEL ESTADO DE GUANAJUATO</div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:38px;width:auto">
+        </div>
+        <div style="text-align:center;font-size:13px;font-weight:800;color:#1a2233;margin-bottom:6px">ESTUDIO EPIDEMIOLÓGICO DE ENFERMEDADES TRANSMITIDAS POR VECTOR (DENGUE / ARBOVIRUS)</div>
+
+        <div class="sec"><div class="sechd">DATOS DE LA UNIDAD</div><div class="secbody">
+          <div class="frow"><span class="flabel">Clave unidad:</span><input class="uline" style="width:120px" data-rw="ee.vectores.claveUnidad"><span class="flabel">Unidad:</span><input class="uline" style="flex:1" data-p="institucion" readonly><span class="flabel">Jurisdicción:</span><input class="uline" style="width:140px" data-rw="ee.vectores.jurisdiccion"></div>
+          <div class="frow"><span class="flabel">RFC:</span><input class="uline" style="width:150px" data-rw="ee.vectores.rfc"><span class="flabel">¿Es indígena?</span><div class="chk-group" data-field="ee.vectores.esIndigena"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Lengua:</span><input class="uline" style="width:120px" data-rw="ee.vectores.cualLengua"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS DEL PACIENTE</div><div class="secbody">
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-combo="apellidoPaterno apellidoMaterno nombre" readonly><span class="flabel">Expediente:</span><input class="uline" style="width:100px" data-p="expediente" readonly></div>
+          <div class="frow"><span class="flabel">CURP:</span><input class="uline" style="width:185px" data-p="curp" readonly><span class="flabel">F. nac.:</span><input class="uline" style="width:100px" data-p="fechaNacimiento" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> F</label><label class="chk"><input type="checkbox" data-val="Masculino"> M</label></div></div>
+          <div class="frow"><span class="flabel">Ocupación:</span><input class="uline" style="width:150px" data-rw="ee.vectores.ocupacion"><span class="flabel">Estado de nacimiento:</span><input class="uline" style="width:130px" data-rw="ee.vectores.estadoNacimiento"><span class="flabel">Municipio:</span><input class="uline" style="flex:1" data-rw="ee.vectores.municipioNacimiento"></div>
+          <div class="frow"><span class="flabel">Domicilio:</span><input class="uline" style="flex:1" data-rw="ee.vectores.domicilioResidencia"><span class="flabel">Colonia:</span><input class="uline" style="width:130px" data-rw="ee.vectores.colonia"><span class="flabel">CP:</span><input class="uline" style="width:70px" data-rw="ee.vectores.cp"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">CLASIFICACIÓN Y CASO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Dx hospitalario inicial:</span><input class="uline" style="flex:1" data-rw="ee.vectores.dxInicialHospitalario"></div>
+          <div class="frow"><span class="flabel">Clasificación:</span><div class="chk-group" data-field="ee.vectores.clasificacion"><label class="chk"><input type="checkbox" data-val="Dengue sin signos de alarma"> Dengue sin alarma</label><label class="chk"><input type="checkbox" data-val="Dengue con signos de alarma"> Con alarma</label><label class="chk"><input type="checkbox" data-val="Dengue grave"> Grave</label><label class="chk"><input type="checkbox" data-val="Otro"> Otro</label></div></div>
+          <div class="frow"><span class="flabel">Tipo de caso:</span><div class="chk-group" data-field="ee.vectores.tipoCaso"><label class="chk"><input type="checkbox" data-val="Autóctono"> Autóctono</label><label class="chk"><input type="checkbox" data-val="Importado"> Importado</label></div><span class="flabel" style="margin-left:12px">Lugares visitados:</span><input class="uline" style="flex:1" data-rw="ee.vectores.lugaresVisitados"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">FECHAS DE EVOLUCIÓN</div><div class="secbody">
+          <div class="frow"><span class="flabel">Inicio síntomas:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaInicioSintomas"><span class="flabel">Inicio fiebre:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaInicioFiebre"><span class="flabel">Inicio signos alarma:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaInicioAlarma"><span class="flabel">Dengue grave:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaInicioGrave"></div>
+          <div class="frow"><span class="flabel">Semanas gestación:</span><input class="uline" style="width:80px" data-rw="ee.vectores.semanasGestacion"><span class="flabel">Fecha última regla:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaUltimaRegla"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">SÍNTOMAS Y COMORBILIDADES</div><div class="secbody">
+          <div class="frow"><span class="flabel">Síntomas:</span><textarea style="width:100%;min-height:44px;resize:none;overflow:hidden;font-size:10px;font-family:inherit;padding:3px 0;border:none;border-bottom:1px solid #1a223344;outline:none;box-sizing:border-box;background:transparent" data-rw="ee.vectores.sintomas" oninput="autoResize(this)" placeholder="Fiebre, cefalea, dolor retroorbital, mialgias, artralgias, exantema…"></textarea></div>
+          <div class="frow"><span class="flabel">Comorbilidades:</span><textarea style="width:100%;min-height:44px;resize:none;overflow:hidden;font-size:10px;font-family:inherit;padding:3px 0;border:none;border-bottom:1px solid #1a223344;outline:none;box-sizing:border-box;background:transparent" data-rw="ee.vectores.comorbilidad" oninput="autoResize(this)" placeholder="Diabetes, HTA, embarazo…"></textarea></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">LABORATORIO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Hto:</span><input class="uline" style="width:60px" data-rw="ee.vectores.hto"><span class="flabel">Hb:</span><input class="uline" style="width:60px" data-rw="ee.vectores.hb"><span class="flabel">Plaquetas:</span><input class="uline" style="width:80px" data-rw="ee.vectores.plaquetas"><span class="flabel">Albúmina:</span><input class="uline" style="width:70px" data-rw="ee.vectores.albumina"><span class="flabel">Leucocitos:</span><input class="uline" style="width:70px" data-rw="ee.vectores.leucocitos"><span class="flabel">Linfocitos:</span><input class="uline" style="width:70px" data-rw="ee.vectores.linfocitos"></div>
+          <div class="frow"><span class="flabel">DHL:</span><input class="uline" style="width:70px" data-rw="ee.vectores.dhl"><span class="flabel">ALT:</span><input class="uline" style="width:70px" data-rw="ee.vectores.alt"><span class="flabel">AST:</span><input class="uline" style="width:70px" data-rw="ee.vectores.ast"><span class="flabel">Bilirrubina directa:</span><input class="uline" style="width:70px" data-rw="ee.vectores.bilirrubinaDirecta"><span class="flabel">Bilirrubina total:</span><input class="uline" style="width:70px" data-rw="ee.vectores.bilirrubinaTotal"></div>
+          <div class="frow"><span class="flabel">Fecha ultrasonido:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaUltrasonido"><span class="flabel">Fecha Rx tórax:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaRadiografia"><span class="flabel">Líquido en cavidades:</span><div class="chk-group" data-field="ee.vectores.liquidoCavidades"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">MUESTRA Y RESULTADO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Tipo de muestra:</span><input class="uline" style="flex:1" data-rw="ee.vectores.tipoMuestraLab"><span class="flabel">Fecha toma:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaTomaMuestra"><span class="flabel">Días en tránsito:</span><input class="uline" style="width:70px" data-rw="ee.vectores.diasTransito"></div>
+          <div class="frow"><span class="flabel">Muestra rechazada:</span><div class="chk-group" data-field="ee.vectores.muestraRechazada"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Fecha recepción:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaRecepcion"><span class="flabel">Muestra tomada:</span><div class="chk-group" data-field="ee.vectores.muestraTomada"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">EGRESO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Folio de caso:</span><input class="uline" style="width:130px" data-rw="ee.vectores.folioCaso"><span class="flabel">Alta voluntaria:</span><div class="chk-group" data-field="ee.vectores.altaVoluntaria"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Defunción:</span><div class="chk-group" data-field="ee.vectores.defuncion"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Fecha:</span><input class="uline" style="width:110px" data-rw="ee.vectores.fechaDefuncion"></div>
+        </div></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px">
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del médico responsable<br><span data-p="medico"></span></div>
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del responsable epidemiológico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== EE IRAG ========== -->
+  <div id="tab-irag" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.4in">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:3px">
+          <div style="font-weight:700;color:#1b3f8b">INSTITUTO DE SALUD PÚBLICA DEL ESTADO DE GUANAJUATO</div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:38px;width:auto">
+        </div>
+        <div style="text-align:center;font-size:13px;font-weight:800;color:#1a2233;margin-bottom:6px">ESTUDIO EPIDEMIOLÓGICO DE INFECCIÓN RESPIRATORIA AGUDA GRAVE (IRAG)</div>
+
+        <div class="sec"><div class="sechd">DATOS DE LA UNIDAD</div><div class="secbody">
+          <div class="frow"><span class="flabel">Unidad:</span><input class="uline" style="flex:1" data-p="institucion" readonly><span class="flabel">Folio:</span><input class="uline" style="width:100px" data-rw="ee.irag.folioCaso"><span class="flabel">Fecha:</span><input class="uline" style="width:110px" data-p="fechaIngreso" readonly></div>
+          <div class="frow"><span class="flabel">Ocupación:</span><input class="uline" style="flex:1" data-rw="ee.irag.ocupacion"><span class="flabel">Se reconoce indígena:</span><div class="chk-group" data-field="ee.irag.seReconoceIndigena"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Habla lengua indígena:</span><div class="chk-group" data-field="ee.irag.hablaLenguaIndigena"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS DEL PACIENTE</div><div class="secbody">
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-combo="apellidoPaterno apellidoMaterno nombre" readonly><span class="flabel">Expediente:</span><input class="uline" style="width:100px" data-p="expediente" readonly></div>
+          <div class="frow"><span class="flabel">CURP:</span><input class="uline" style="width:185px" data-p="curp" readonly><span class="flabel">F. nac.:</span><input class="uline" style="width:100px" data-p="fechaNacimiento" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> F</label><label class="chk"><input type="checkbox" data-val="Masculino"> M</label></div></div>
+          <div class="frow"><span class="flabel">Domicilio:</span><input class="uline" style="flex:1" data-p="domicilio" readonly><span class="flabel">Tel.:</span><input class="uline" style="width:120px" data-p="telefono" readonly></div>
+          <div class="frow"><span class="flabel">Tipo de paciente:</span><div class="chk-group" data-field="ee.irag.tipoPaciente"><label class="chk"><input type="checkbox" data-val="Ambulatorio"> Ambulatorio</label><label class="chk"><input type="checkbox" data-val="Hospitalizado"> Hospitalizado</label><label class="chk"><input type="checkbox" data-val="UCI"> UCI</label></div><span class="flabel" style="margin-left:12px">¿Es migrante?</span><div class="chk-group" data-field="ee.irag.esMigrante"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">País:</span><input class="uline" style="flex:1" data-rw="ee.irag.paisNacionalidad"></div>
+          <div class="frow"><span class="flabel">País de nacimiento:</span><input class="uline" style="width:130px" data-rw="ee.irag.paisNacimiento"><span class="flabel">Entidad nac.:</span><input class="uline" style="width:130px" data-rw="ee.irag.entidadNacimiento"><span class="flabel">F. ingreso México:</span><input class="uline" style="width:110px" data-rw="ee.irag.fechaIngresoMexico"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS OBSTÉTRICOS</div><div class="secbody">
+          <div class="frow"><span class="flabel">¿Embarazada?</span><div class="chk-group" data-field="ee.irag.embarazada"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label><label class="chk"><input type="checkbox" data-val="N/A"> N/A</label></div><span class="flabel" style="margin-left:12px">Meses de embarazo:</span><input class="uline" style="width:60px" data-rw="ee.irag.mesesEmbarazo"><span class="flabel">Puerperio:</span><div class="chk-group" data-field="ee.irag.puerperio"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Días puerperio:</span><input class="uline" style="width:60px" data-rw="ee.irag.diasPuerperio"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">ANTECEDENTES Y VACUNACIÓN</div><div class="secbody">
+          <div class="frow"><span class="flabel">Fecha inicio síntomas:</span><input class="uline" style="width:110px" data-rw="ee.irag.fechaInicioSintomas"><span class="flabel">Viaje reciente:</span><div class="chk-group" data-field="ee.irag.viajeReciente"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Contacto respiratorio:</span><div class="chk-group" data-field="ee.irag.contactoRespiratorio"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Contacto animales:</span><div class="chk-group" data-field="ee.irag.contactoAnimales"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">Vacuna influenza:</span><div class="chk-group" data-field="ee.irag.vacunaInfluenza"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Vacuna COVID:</span><div class="chk-group" data-field="ee.irag.vacunaCovid"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Dosis:</span><input class="uline" style="width:50px" data-rw="ee.irag.cuantasDosis"><span class="flabel">Marca:</span><input class="uline" style="width:100px" data-rw="ee.irag.marcaVacuna"><span class="flabel">Fecha 1ª:</span><input class="uline" style="width:100px" data-rw="ee.irag.fecha1aDosis"><span class="flabel">Fecha 2ª:</span><input class="uline" style="width:100px" data-rw="ee.irag.fecha2aDosis"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">CUADRO CLÍNICO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Síntomas:</span><textarea style="width:100%;min-height:44px;resize:none;overflow:hidden;font-size:10px;font-family:inherit;padding:3px 0;border:none;border-bottom:1px solid #1a223344;outline:none;box-sizing:border-box;background:transparent" data-rw="ee.irag.sintomas" oninput="autoResize(this)" placeholder="Fiebre, tos, disnea, dolor torácico, rinorrea…"></textarea></div>
+          <div class="frow"><span class="flabel">Comorbilidades:</span><textarea style="width:100%;min-height:44px;resize:none;overflow:hidden;font-size:10px;font-family:inherit;padding:3px 0;border:none;border-bottom:1px solid #1a223344;outline:none;box-sizing:border-box;background:transparent" data-rw="ee.irag.comorbilidad" oninput="autoResize(this)" placeholder="Diabetes, HTA, obesidad, EPOC…"></textarea></div>
+          <div class="frow"><span class="flabel">Neumonía:</span><div class="chk-group" data-field="ee.irag.neumonia"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">UCI:</span><div class="chk-group" data-field="ee.irag.uci"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Intubado:</span><div class="chk-group" data-field="ee.irag.intubado"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">TRATAMIENTO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Antipiréticos:</span><div class="chk-group" data-field="ee.irag.tratamientoAntipireticos"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Antivirales:</span><div class="chk-group" data-field="ee.irag.tratamientoAntivirales"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Inicio:</span><input class="uline" style="width:100px" data-rw="ee.irag.inicioTratamientoAntiviral"><span class="flabel">Antiviral:</span><input class="uline" style="flex:1" data-rw="ee.irag.antiviralSeleccionado"></div>
+          <div class="frow"><span class="flabel">Antimicrobianos:</span><div class="chk-group" data-field="ee.irag.tratamientoAntimicrobianos"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">MUESTRA Y RESULTADO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Muestra tomada:</span><div class="chk-group" data-field="ee.irag.muestraTomada"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Tipo:</span><input class="uline" style="width:130px" data-rw="ee.irag.tipoMuestra"><span class="flabel">Fecha:</span><input class="uline" style="width:110px" data-rw="ee.irag.fechaTomaMuestra"><span class="flabel">Laboratorio:</span><input class="uline" style="flex:1" data-rw="ee.irag.laboratorioProcesamiento"></div>
+          <div class="frow"><span class="flabel">Resultado:</span><input class="uline" style="flex:1" data-rw="ee.irag.resultadoMuestra"><span class="flabel">Ant. COVID:</span><div class="chk-group" data-field="ee.irag.muestraAntigeno"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:8px">Resultado antígeno:</span><input class="uline" style="flex:1" data-rw="ee.irag.resultadoAntigeno"></div>
+          <div class="frow"><span class="flabel">COVID clínico-epidemiológico:</span><div class="chk-group" data-field="ee.irag.covidClinicoEpidemiologico"><label class="chk"><input type="checkbox" data-val="Positivo"> Positivo</label><label class="chk"><input type="checkbox" data-val="Negativo"> Negativo</label><label class="chk"><input type="checkbox" data-val="N/A"> N/A</label></div></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">EGRESO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Evolución:</span><div class="chk-group" data-field="ee.irag.evolucion"><label class="chk"><input type="checkbox" data-val="Mejoría"> Mejoría</label><label class="chk"><input type="checkbox" data-val="Sin cambios"> Sin cambios</label><label class="chk"><input type="checkbox" data-val="Defunción"> Defunción</label></div><span class="flabel" style="margin-left:12px">Folio certificado defunción:</span><input class="uline" style="flex:1" data-rw="ee.irag.folioCertificadoDefuncion"></div>
+        </div></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px">
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del médico responsable<br><span data-p="medico"></span></div>
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del responsable epidemiológico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== EE PONZOÑOSO ========== -->
+  <div id="tab-ponzonoso" class="tab-pane">
+    <div class="doc-outer">
+      <div class="doc-page" style="width:8.5in;padding:.4in">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:10.5px;margin-bottom:3px">
+          <div style="font-weight:700;color:#1b3f8b">INSTITUTO DE SALUD PÚBLICA DEL ESTADO DE GUANAJUATO</div>
+          <img src="assets/logo_guanajuato_gob.png" style="height:38px;width:auto">
+        </div>
+        <div style="text-align:center;font-size:13px;font-weight:800;color:#1a2233;margin-bottom:6px">ESTUDIO EPIDEMIOLÓGICO DE INTOXICACIÓN POR ANIMAL PONZOÑOSO</div>
+
+        <div class="sec"><div class="sechd">DATOS DE LA UNIDAD</div><div class="secbody">
+          <div class="frow"><span class="flabel">Fecha notificación:</span><input class="uline" style="width:110px" data-rw="ee.ponzonoso.fechaNotificacion"><span class="flabel">Hora:</span><input class="uline" style="width:70px" data-rw="ee.ponzonoso.horaNotificacion"><span class="flabel">Folio plataforma:</span><input class="uline" style="width:120px" data-rw="ee.ponzonoso.folioPlataforma"><span class="flabel">Institución:</span><input class="uline" style="flex:1" data-p="institucion" readonly></div>
+          <div class="frow"><span class="flabel">RFC:</span><input class="uline" style="width:150px" data-rw="ee.ponzonoso.rfc"><span class="flabel">Seguridad social:</span><input class="uline" style="width:150px" data-rw="ee.ponzonoso.seguridadSocial"><span class="flabel">Sector:</span><input class="uline" style="width:100px" data-rw="ee.ponzonoso.sector"><span class="flabel">Manzana:</span><input class="uline" style="width:80px" data-rw="ee.ponzonoso.manzana"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS DEL PACIENTE</div><div class="secbody">
+          <div class="frow"><span class="flabel">Nombre:</span><input class="uline" style="flex:1" data-combo="apellidoPaterno apellidoMaterno nombre" readonly><span class="flabel">Expediente:</span><input class="uline" style="width:100px" data-p="expediente" readonly></div>
+          <div class="frow"><span class="flabel">CURP:</span><input class="uline" style="width:185px" data-p="curp" readonly><span class="flabel">F. nac.:</span><input class="uline" style="width:100px" data-p="fechaNacimiento" readonly><span class="flabel">Edad:</span><input class="uline" style="width:50px" data-p="edad" readonly><span class="flabel">Sexo:</span><div class="chk-group" data-field="sexo"><label class="chk"><input type="checkbox" data-val="Femenino"> F</label><label class="chk"><input type="checkbox" data-val="Masculino"> M</label></div></div>
+          <div class="frow"><span class="flabel">Domicilio:</span><input class="uline" style="flex:1" data-p="domicilio" readonly><span class="flabel">Tel.:</span><input class="uline" style="width:120px" data-p="telefono" readonly></div>
+          <div class="frow"><span class="flabel">Ocupación:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.ocupacionActual"><span class="flabel">Sabe leer:</span><div class="chk-group" data-field="ee.ponzonoso.sabeLeer"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Habla lengua originaria:</span><div class="chk-group" data-field="ee.ponzonoso.hablaLenguaOriginaria"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:8px">¿Cuál?</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.puebloOriginarioCual"></div>
+          <div class="frow"><span class="flabel">¿Embarazo actual?</span><div class="chk-group" data-field="ee.ponzonoso.embarazoActual"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label><label class="chk"><input type="checkbox" data-val="N/A"> N/A</label></div><span class="flabel" style="margin-left:12px">Semanas gestación:</span><input class="uline" style="width:60px" data-rw="ee.ponzonoso.semanaGestacion"><span class="flabel">¿Es migrante?</span><div class="chk-group" data-field="ee.ponzonoso.esMigrante"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">País de origen:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.paisOrigen"></div>
+          <div class="frow"><span class="flabel">Comorbilidades:</span><textarea style="width:100%;min-height:36px;resize:none;overflow:hidden;font-size:10px;font-family:inherit;padding:3px 0;border:none;border-bottom:1px solid #1a223344;outline:none;box-sizing:border-box;background:transparent" data-rw="ee.ponzonoso.comorbilidades" oninput="autoResize(this)" placeholder="Diabetes, HTA, cardiopatía…"></textarea></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS DEL EVENTO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Entidad de la intoxicación:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.entidadIntoxicacion"><span class="flabel">Colonia:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.coloniaIntoxicacion"><span class="flabel">Calle:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.calleIntoxicacion"><span class="flabel">Núm.:</span><input class="uline" style="width:60px" data-rw="ee.ponzonoso.numIntIntoxicacion"></div>
+          <div class="frow"><span class="flabel">Fecha intoxicación:</span><input class="uline" style="width:110px" data-rw="ee.ponzonoso.fechaIntoxicacion"><span class="flabel">Hora:</span><input class="uline" style="width:70px" data-rw="ee.ponzonoso.horaIntoxicacion"><span class="flabel">Momento:</span><div class="chk-group" data-field="ee.ponzonoso.momentoIntoxicacion"><label class="chk"><input type="checkbox" data-val="Diurno"> Diurno</label><label class="chk"><input type="checkbox" data-val="Nocturno"> Nocturno</label></div></div>
+          <div class="frow"><span class="flabel">Sitio donde ocurrió:</span><div class="chk-group" data-field="ee.ponzonoso.sitioOcurrio"><label class="chk"><input type="checkbox" data-val="Hogar"> Hogar</label><label class="chk"><input type="checkbox" data-val="Campo"> Campo</label><label class="chk"><input type="checkbox" data-val="Trabajo"> Trabajo</label><label class="chk"><input type="checkbox" data-val="Otro"> Otro</label></div></div>
+          <div class="frow"><span class="flabel">Actividad que realizaba:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.actividadRealizando"><span class="flabel">Sitio del agente:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.sitioAgente"></div>
+          <div class="frow"><span class="flabel">Interrogatorio:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.interrogatorio"><span class="flabel">Familiar/acompañante:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.nombreFamiliar"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">CUADRO CLÍNICO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Región corporal afectada:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.regionCorporal"><span class="flabel">Agente causal:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.agenteCausal"><span class="flabel">Clasificación gravedad:</span><div class="chk-group" data-field="ee.ponzonoso.clasificacionGravedad"><label class="chk"><input type="checkbox" data-val="Leve"> Leve</label><label class="chk"><input type="checkbox" data-val="Moderado"> Moderado</label><label class="chk"><input type="checkbox" data-val="Grave"> Grave</label></div></div>
+          <div class="frow"><span class="flabel">Síntomas:</span><textarea style="width:100%;min-height:44px;resize:none;overflow:hidden;font-size:10px;font-family:inherit;padding:3px 0;border:none;border-bottom:1px solid #1a223344;outline:none;box-sizing:border-box;background:transparent" data-rw="ee.ponzonoso.sintomas" oninput="autoResize(this)" placeholder="Dolor local, edema, parestesias, náuseas, visión borrosa…"></textarea></div>
+          <div class="frow"><span class="flabel">Fecha inicio cuadro:</span><input class="uline" style="width:110px" data-rw="ee.ponzonoso.fechaInicioCuadro"><span class="flabel">Hora inicio síntomas:</span><input class="uline" style="width:80px" data-rw="ee.ponzonoso.horaInicioSintomas"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">ATENCIÓN Y TRASLADO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Tipo de atención:</span><div class="chk-group" data-field="ee.ponzonoso.tipoAtencion"><label class="chk"><input type="checkbox" data-val="Ambulatoria"> Ambulatoria</label><label class="chk"><input type="checkbox" data-val="Hospitalaria"> Hospitalaria</label></div><span class="flabel" style="margin-left:12px">Tiempo hospitalización (hrs):</span><input class="uline" style="width:70px" data-rw="ee.ponzonoso.tiempoHospitalizacion"></div>
+          <div class="frow"><span class="flabel">Traslado:</span><div class="chk-group" data-field="ee.ponzonoso.traslado"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Lugar:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.lugarTraslado"><span class="flabel">Motivo:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.motivoTraslado"><span class="flabel">Fecha:</span><input class="uline" style="width:100px" data-rw="ee.ponzonoso.fechaTraslado"></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">ANTÍDOTO / TRATAMIENTO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Vacuna antitetánica:</span><div class="chk-group" data-field="ee.ponzonoso.vacunaAntitetanica"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div><span class="flabel" style="margin-left:12px">Fecha:</span><input class="uline" style="width:110px" data-rw="ee.ponzonoso.fechaVacunaAntitetanica"></div>
+          <div class="frow"><span class="flabel">Tipo de antídoto:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.tipoAntidoto"><span class="flabel">Hora aplicación:</span><input class="uline" style="width:80px" data-rw="ee.ponzonoso.horaAntidoto"><span class="flabel">Núm. frascos:</span><input class="uline" style="width:70px" data-rw="ee.ponzonoso.numFrascos"><span class="flabel">Vía:</span><input class="uline" style="width:80px" data-rw="ee.ponzonoso.viaAdministracion"></div>
+          <div class="frow"><span class="flabel">Lote:</span><input class="uline" style="width:100px" data-rw="ee.ponzonoso.loteAntidoto"><span class="flabel">Caducidad:</span><input class="uline" style="width:100px" data-rw="ee.ponzonoso.caducidadAntidoto"><span class="flabel">Otros medicamentos:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.otrosMedicamentos"></div>
+          <div class="frow"><span class="flabel">Observaciones del tratamiento:</span><textarea style="width:100%;min-height:36px;resize:none;overflow:hidden;font-size:10px;font-family:inherit;padding:3px 0;border:none;border-bottom:1px solid #1a223344;outline:none;box-sizing:border-box;background:transparent" data-rw="ee.ponzonoso.observacionesTratamiento" oninput="autoResize(this)"></textarea></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">DATOS DEL ANIMAL / LABORATORIO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Estado del animal:</span><div class="chk-group" data-field="ee.ponzonoso.estadoAnimal"><label class="chk"><input type="checkbox" data-val="Vivo"> Vivo</label><label class="chk"><input type="checkbox" data-val="Muerto"> Muerto</label><label class="chk"><input type="checkbox" data-val="No capturado"> No capturado</label></div><span class="flabel" style="margin-left:12px">¿Enviado a lab?</span><div class="chk-group" data-field="ee.ponzonoso.enviadoLaboratorio"><label class="chk"><input type="checkbox" data-val="Sí"> Sí</label><label class="chk"><input type="checkbox" data-val="No"> No</label></div></div>
+          <div class="frow"><span class="flabel">Especie taxonómica:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.especieTaxonomica"><span class="flabel">Identificado por:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.porQuienTaxonomico"></div>
+          <div class="frow"><span class="flabel">Nota de laboratorio:</span><textarea style="width:100%;min-height:36px;resize:none;overflow:hidden;font-size:10px;font-family:inherit;padding:3px 0;border:none;border-bottom:1px solid #1a223344;outline:none;box-sizing:border-box;background:transparent" data-rw="ee.ponzonoso.notaLaboratorio" oninput="autoResize(this)"></textarea></div>
+        </div></div>
+
+        <div class="sec"><div class="sechd">EGRESO</div><div class="secbody">
+          <div class="frow"><span class="flabel">Folio certificado defunción:</span><input class="uline" style="flex:1" data-rw="ee.ponzonoso.folioCertificadoDefuncion"></div>
+        </div></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px">
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del médico responsable<br><span data-p="medico"></span></div>
+          <div style="border-top:1px solid #1a2233;padding-top:5px;font-size:10px;text-align:center">Nombre y firma del responsable epidemiológico</div>
         </div>
       </div>
     </div>
